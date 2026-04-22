@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script>
+// SPA redirect handler — restores URL after 404.html redirect
+(function(l){
+  if(l.search[1]=='/'){
+    var decoded=l.search.slice(1).replace(/~and~/g,'&');
+    window.history.replaceState(null,null,l.pathname.slice(0,-1)+decoded+(l.hash||''));
+  }
+}(window.location));
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everelt — Recharge de portefeuilles mobiles en Afrique de l'Ouest</title>
+<meta name="description" content="Everelt est un service digital de recharge de portefeuilles mobiles en Afrique de l'Ouest. Simple, transparent, sécurisé.">
+<link rel="icon" type="image/png" href="https://ngivray.wordpress.com/wp-content/uploads/2026/04/favicon.png">
+<link rel="apple-touch-icon" href="https://ngivray.wordpress.com/wp-content/uploads/2026/04/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F9F8F5;--bg2:#F2F0EB;--bg3:#EAE8E2;
+  --ink:#1A1916;--ink2:#5A5850;--ink3:#9A9890;
+  --gold:#B8891E;--gold-light:#F5EDD6;--gold-mid:#D4A83A;--gold-dark:#8A6410;
+  --green:#1A6B3C;--green-light:#E8F4EE;
+  --border:rgba(26,25,22,0.10);--border2:rgba(26,25,22,0.06);
+  --radius:10px;--radius-lg:16px;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --shadow:0 4px 28px rgba(26,25,22,0.07);
+  --shadow-lg:0 8px 48px rgba(26,25,22,0.10);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.page{display:none}.page.active{display:block}
+.lang-block{display:none}.lang-block.active{display:block}
+
+/* LOGO IMAGE */
+.logo-img{height:28px;width:auto;display:block;object-fit:contain;mix-blend-mode:multiply;cursor:pointer}
+.logo-img-footer{height:24px;width:auto;display:block;object-fit:contain;filter:invert(1);mix-blend-mode:screen;cursor:pointer;opacity:.92}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(249,248,245,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 5vw;display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
+.nav-left{display:flex;align-items:center;gap:32px}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer;font-family:var(--serif);font-size:21px;font-weight:500;color:var(--ink)}
+.logo svg{flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none}
+.nav-links a{font-size:14px;font-weight:400;color:var(--ink2);cursor:pointer;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:12px}
+
+/* LANG SWITCHER */
+.lang-sw{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:99px;padding:3px;gap:2px}
+.lb{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink3);padding:4px 10px;border-radius:99px;transition:all .2s;letter-spacing:.02em}
+.lb:hover{color:var(--ink2)}
+.lb.active{background:#fff;color:var(--gold-dark);box-shadow:0 1px 4px rgba(0,0,0,0.08);font-weight:500}
+.nav-cta{background:var(--ink);color:var(--bg);padding:8px 20px;border-radius:var(--radius);font-size:14px;font-weight:500;transition:opacity .2s;white-space:nowrap}
+.nav-cta:hover{opacity:.82}
+.nav-mob{display:none;align-items:center;gap:8px}
+.lang-sw-sm{display:flex;align-items:center;background:var(--bg2);border:1px solid var(--border);border-radius:99px;padding:2px;gap:1px}
+.lb-sm{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:11px;font-weight:500;color:var(--ink3);padding:3px 8px;border-radius:99px;transition:all .2s}
+.lb-sm.active{background:#fff;color:var(--gold-dark);box-shadow:0 1px 3px rgba(0,0,0,0.07)}
+.nav-mob-cta{background:var(--ink);color:var(--bg);padding:7px 14px;border-radius:var(--radius);font-size:13px;font-weight:500}
+
+/* BUTTONS */
+.btn{display:inline-block;padding:13px 28px;border-radius:var(--radius);font-family:var(--sans);font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:var(--ink);color:var(--bg)}
+.btn-primary:hover{opacity:.82;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--ink);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--bg2);border-color:rgba(26,25,22,0.20)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:var(--gold-dark);transform:translateY(-1px)}
+.btn-outline-light{background:transparent;color:var(--bg);border:1px solid rgba(249,248,245,0.3)}
+.btn-outline-light:hover{background:rgba(249,248,245,0.08)}
+
+/* HERO */
+.hero{padding:96px 5vw 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);background:var(--gold-light);padding:5px 13px;border-radius:99px;margin-bottom:22px}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold-mid);flex-shrink:0}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,3.8vw,52px);font-weight:500;line-height:1.16;color:var(--ink);margin-bottom:18px;letter-spacing:-.2px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:17px;color:var(--ink2);line-height:1.7;margin-bottom:12px}
+.hero-support{font-size:14px;color:var(--ink3);line-height:1.7;margin-bottom:32px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.hero-trust{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.hero-trust span::before{content:'·';margin-right:6px;color:var(--gold-mid)}
+.hero-trust span:first-child::before{display:none}
+
+/* CALC CARD */
+.hero-visual{position:relative;display:flex;justify-content:center}
+.calc-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg);width:100%;max-width:360px;position:relative;overflow:hidden}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-light))}
+.cc-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.cc-wrap{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg);transition:border-color .2s;margin-bottom:4px}
+.cc-wrap:focus-within{border-color:var(--ink)}
+.cc-cur{padding:0 12px;font-size:13px;font-weight:500;color:var(--ink2);background:var(--bg2);border-right:1px solid var(--border);height:46px;display:flex;align-items:center;flex-shrink:0}
+.cc-wrap input{border:none;background:transparent;padding:0 12px;font-family:var(--sans);font-size:18px;font-weight:500;color:var(--ink);width:100%;height:46px;outline:none}
+.cc-arrow{text-align:center;padding:7px 0;color:var(--ink3);font-size:18px}
+.cc-result{font-size:24px;font-weight:500;font-family:var(--serif);color:var(--ink);padding:10px 12px}
+.cc-breakdown{margin-top:14px;padding-top:14px;border-top:1px solid var(--border2)}
+.cc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);padding:3px 0}
+.cc-row.total{font-weight:500;color:var(--ink);font-size:14px;border-top:1px solid var(--border);margin-top:6px;padding-top:8px}
+.cc-note{font-size:12px;color:var(--ink3);margin-top:12px;line-height:1.5}
+.cc-btn{width:100%;margin-top:14px;padding:12px;background:var(--ink);color:var(--bg);border:none;border-radius:var(--radius);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.cc-btn:hover{opacity:.82}
+
+/* TRUST BAR */
+.trust-bar{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 5vw;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink2);padding:7px 28px;border-right:1px solid var(--border)}
+.trust-item:last-child{border-right:none}
+.trust-icon{width:17px;height:17px;color:var(--gold);flex-shrink:0}
+
+/* SECTIONS */
+.section{padding:80px 5vw;max-width:1200px;margin:0 auto}
+.section-alt{background:var(--bg2)}
+.section-dark{background:var(--ink)}
+.section-eyebrow{font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:block}
+.section-title{font-family:var(--serif);font-size:clamp(26px,2.8vw,38px);font-weight:500;color:var(--ink);line-height:1.2;margin-bottom:12px}
+.section-sub{font-size:16px;color:var(--ink2);line-height:1.7;max-width:540px}
+.section-header{margin-bottom:48px}
+.section-dark .section-title{color:var(--bg)}
+.section-dark .section-sub{color:rgba(249,248,245,0.55)}
+.section-dark .section-eyebrow{color:var(--gold-mid)}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--border)}
+.step{background:#fff;padding:34px 26px;transition:background .2s}
+.step:hover{background:var(--gold-light)}
+.step-num{font-family:var(--serif);font-size:12px;font-weight:500;color:var(--gold);letter-spacing:.04em;margin-bottom:16px}
+.step-icon{width:40px;height:40px;background:var(--gold-light);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:14px}
+.step-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:9px}
+.step-body{font-size:14px;color:var(--ink2);line-height:1.65}
+.steps-note{font-size:13px;color:var(--ink3);margin-top:18px;padding:12px 16px;background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border)}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.feature{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;transition:all .2s}
+.feature:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.feature-icon{width:42px;height:42px;background:var(--gold-light);border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:16px}
+.feature-title{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.feature-body{font-size:14px;color:var(--ink2);line-height:1.65}
+
+/* WAEMU GRID */
+.waemu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:36px}
+.country-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;align-items:center;gap:12px;transition:box-shadow .2s}
+.country-card.live{border-color:rgba(26,107,60,0.25)}
+.country-card:hover{box-shadow:var(--shadow)}
+.country-flag{font-size:26px;flex-shrink:0;line-height:1}
+.country-info{flex:1;min-width:0}
+.country-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.country-mno{font-size:12px;color:var(--ink3)}
+.country-badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.badge-live{background:var(--green-light);color:var(--green)}
+.badge-soon{background:var(--bg2);color:var(--ink3);border:1px solid var(--border)}
+.waemu-note{margin-top:18px;font-size:13px;color:var(--ink2);text-align:center}
+
+/* WAITLIST */
+.waitlist{background:var(--ink);border-radius:var(--radius-lg);padding:36px;margin-top:28px;text-align:center}
+.waitlist-title{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--bg);margin-bottom:8px}
+.waitlist-sub{font-size:14px;color:rgba(249,248,245,0.52);margin-bottom:22px;line-height:1.6}
+.waitlist-form{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap}
+.waitlist-input{flex:1;min-width:200px;height:46px;border:1px solid rgba(249,248,245,0.18);border-radius:var(--radius);background:rgba(249,248,245,0.07);padding:0 16px;font-family:var(--sans);font-size:14px;color:var(--bg);outline:none;transition:border-color .2s}
+.waitlist-input:focus{border-color:var(--gold-mid)}
+.waitlist-input::placeholder{color:rgba(249,248,245,0.3)}
+.waitlist-btn{height:46px;padding:0 22px;background:var(--gold);color:#fff;border:none;border-radius:var(--radius);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:background .2s;white-space:nowrap}
+.waitlist-btn:hover{background:var(--gold-dark)}
+.waitlist-success{display:none;align-items:center;justify-content:center;gap:8px;font-size:14px;color:var(--green-light);margin-top:14px}
+.waitlist-success svg{color:var(--green-light);width:18px;height:18px}
+.waitlist-note{font-size:11px;color:rgba(249,248,245,0.25);margin-top:12px}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.pricing-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;text-align:center}
+.pricing-icon{width:44px;height:44px;background:var(--gold-light);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);margin:0 auto 14px}
+.pricing-title{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.pricing-body{font-size:14px;color:var(--ink2);line-height:1.6}
+
+/* SECURITY */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:28px}
+.sec-card{background:rgba(249,248,245,0.06);border:1px solid rgba(249,248,245,0.10);border-radius:var(--radius-lg);padding:22px;display:flex;align-items:flex-start;gap:12px}
+.sec-icon{width:34px;height:34px;background:rgba(184,137,30,0.18);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold-mid)}
+.sec-text{font-size:14px;font-weight:500;color:rgba(249,248,245,0.82);line-height:1.5}
+.sec-note{margin-top:24px;font-size:13px;color:rgba(249,248,245,0.35);border-top:1px solid rgba(249,248,245,0.08);padding-top:18px}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;padding:18px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;font-family:var(--sans);font-size:15px;font-weight:500;color:var(--ink);gap:14px;transition:color .2s}
+.faq-q:hover{color:var(--gold)}
+.faq-q svg{flex-shrink:0;transition:transform .3s;color:var(--ink3)}
+.faq-q.open svg{transform:rotate(45deg);color:var(--gold)}
+.faq-a{font-size:14px;color:var(--ink2);line-height:1.7;padding:0 0 18px;display:none}
+.faq-a.open{display:block}
+
+/* CTA BAND */
+.cta-band{background:var(--ink);padding:80px 5vw;text-align:center}
+.cta-band h2{font-family:var(--serif);font-size:clamp(26px,3.2vw,38px);font-weight:500;color:var(--bg);margin-bottom:14px;max-width:600px;margin-left:auto;margin-right:auto;line-height:1.2}
+.cta-band p{font-size:16px;color:rgba(249,248,245,0.55);margin-bottom:30px;line-height:1.7}
+.cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* DISCLAIMER */
+.disclaimer{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 5vw;text-align:center;font-size:13px;color:var(--ink2);line-height:1.6}
+.disclaimer strong{color:var(--ink);font-weight:500}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(249,248,245,0.55);padding:48px 5vw 28px}
+.footer-top{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:36px;padding-bottom:40px;border-bottom:1px solid rgba(249,248,245,0.10);margin-bottom:24px}
+.footer-logo{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:20px;font-weight:500;color:var(--bg);cursor:pointer}
+.footer-tagline{font-size:13px;color:rgba(249,248,245,0.38);margin-top:10px;max-width:200px;line-height:1.6}
+.footer-col h4{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--bg);margin-bottom:14px}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:8px}
+.footer-col a{font-size:13px;color:rgba(249,248,245,0.42);cursor:pointer;transition:color .2s}
+.footer-col a:hover{color:var(--bg)}
+.footer-bottom{display:flex;flex-direction:column;gap:8px}
+.footer-copy{font-size:12px;color:rgba(249,248,245,0.22)}
+.footer-compliance{font-size:11px;color:rgba(249,248,245,0.18);line-height:1.6;max-width:760px}
+
+/* LEGAL PAGES */
+.legal-wrap{max-width:740px;margin:0 auto;padding:60px 5vw 80px}
+.legal-wrap h1{font-family:var(--serif);font-size:34px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.legal-meta{font-size:13px;color:var(--ink3);margin-bottom:40px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.legal-wrap h2{font-family:var(--serif);font-size:19px;font-weight:500;color:var(--ink);margin:36px 0 12px}
+.legal-wrap h3{font-size:15px;font-weight:500;color:var(--ink);margin:22px 0 8px}
+.legal-wrap p{font-size:15px;color:var(--ink2);line-height:1.75;margin-bottom:14px}
+.legal-wrap ul{padding-left:20px;margin-bottom:14px}
+.legal-wrap li{font-size:15px;color:var(--ink2);line-height:1.75;margin-bottom:7px}
+.legal-wrap a{color:var(--gold)}
+.legal-box{background:var(--gold-light);border-left:3px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:22px 0}
+.legal-box p{margin:0;color:var(--ink);font-size:14px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero>*{animation:fadeUp .6s ease both}
+.hero>:nth-child(2){animation-delay:.1s}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.footer-top{grid-template-columns:1fr 1fr;gap:28px}}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;gap:44px;padding:60px 5vw}
+  .hero-visual{order:-1}
+  .calc-card{max-width:100%}
+  .nav-left .nav-links,.nav-right .nav-cta,.nav-right .lang-sw{display:none}
+  .nav-mob{display:flex}
+  .about-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .pricing-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .trust-item{border-right:none;border-bottom:1px solid var(--border);width:100%}
+  .trust-bar{flex-direction:column;align-items:flex-start;padding:10px 5vw}
+  .cta-actions{flex-direction:column;align-items:center}
+  .waemu-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-left">
+    <div class="logo" onclick="showPage('home')">
+      <img src="https://ngivray.wordpress.com/wp-content/uploads/2026/04/photo_2026-04-18-16.38.54-1-1.jpeg" class="logo-img" alt="Everelt">
+    </div>
+    <ul class="nav-links">
+      <li><a href="#how-it-works" data-i18n="nav.how"></a></li>
+      <li><a href="#why" data-i18n="nav.why"></a></li>
+      <li><a href="#coverage" data-i18n="nav.cov"></a></li>
+      <li><a href="#faq" data-i18n="nav.faq"></a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <div class="lang-sw">
+      <button class="lb active" onclick="setLang('fr')">FR</button>
+      <button class="lb" onclick="setLang('ru')">RU</button>
+      <button class="lb" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="https://t.me/everelt_bot" target="_blank" class="nav-cta" data-i18n="nav.cta"></a>
+  </div>
+  <div class="nav-mob">
+    <div class="lang-sw-sm">
+      <button class="lb-sm active" onclick="setLang('fr')">FR</button>
+      <button class="lb-sm" onclick="setLang('ru')">RU</button>
+      <button class="lb-sm" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="https://t.me/everelt_bot" target="_blank" class="nav-mob-cta" data-i18n="nav.cta"></a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PAGE HOME ═══════════════════ -->
+<div id="page-home" class="page active">
+
+<!-- HERO -->
+<div style="background:var(--bg)">
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow"></div>
+    <h1 data-i18n="hero.h1"></h1>
+    <p class="hero-sub" data-i18n="hero.sub"></p>
+    <p class="hero-support" data-i18n="hero.support"></p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://t.me/everelt_bot" target="_blank" data-i18n="hero.cta1"></a>
+      <a class="btn btn-secondary" href="#how-it-works" data-i18n="hero.cta2"></a>
+    </div>
+    <div class="hero-trust">
+      <span data-i18n="hero.t1"></span><span data-i18n="hero.t2"></span><span data-i18n="hero.t3"></span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="calc-card">
+      <div class="cc-label" data-i18n="calc.label_send"></div>
+      <div class="cc-wrap">
+        <div class="cc-cur">RUB ₽</div>
+        <input type="number" id="rub-input" value="10000" min="500" oninput="calcUpdate()">
+      </div>
+      <div class="cc-arrow">↓</div>
+      <div class="cc-label" data-i18n="calc.label_recv"></div>
+      <div class="cc-wrap" style="cursor:default">
+        <div class="cc-cur">XOF</div>
+        <div class="cc-result" id="xof-result">—</div>
+      </div>
+      <div class="cc-breakdown">
+        <div class="cc-row"><span data-i18n="calc.rate_label"></span><span id="rate-display">—</span></div>
+        <div class="cc-row total"><span data-i18n="calc.total_label"></span><span id="total-display">—</span></div>
+      </div>
+      <p class="cc-note" data-i18n="calc.note"></p>
+      <button class="cc-btn" onclick="window.open('https://t.me/everelt_bot','_blank')" data-i18n="calc.btn"></button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 18 18" fill="none"><path d="M4 9L7.5 12.5L14 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="trust.1"></span></div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M9 6C7.9 6 7 6.9 7 8s.9 2 2 2 2 1.1 2 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M9 5v1M9 12v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span data-i18n="trust.2"></span></div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5V9C15 12.5 12.3 15.7 9 16.5C5.7 15.7 3 12.5 3 9V5L9 2Z" stroke="currentColor" stroke-width="1.3"/></svg><span data-i18n="trust.3"></span></div>
+  <div class="trust-item"><svg class="trust-icon" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 8h16" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="11" r="1" fill="currentColor"/></svg><span data-i18n="trust.4"></span></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="how-it-works" style="background:var(--bg2)">
+<div class="section">
+  <div class="section-header">
+    <span class="section-eyebrow" data-i18n="how.eyebrow"></span>
+    <h2 class="section-title" data-i18n="how.title"></h2>
+    <p class="section-sub" data-i18n="how.sub"></p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 17C3 13.686 6.134 11 10 11s7 2.686 7 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="step-title" data-i18n="how.s1t"></div><p class="step-body" data-i18n="how.s1b"></p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M7 10h6M10 7v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      <div class="step-title" data-i18n="how.s2t"></div><p class="step-body" data-i18n="how.s2b"></p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 9h16" stroke="currentColor" stroke-width="1.3"/><circle cx="6" cy="13" r="1" fill="currentColor"/></svg></div>
+      <div class="step-title" data-i18n="how.s3t"></div><p class="step-body" data-i18n="how.s3b"></p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10L8 14L16 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="step-title" data-i18n="how.s4t"></div><p class="step-body" data-i18n="how.s4b"></p>
+    </div>
+  </div>
+  <p class="steps-note" data-i18n="how.note"></p>
+</div>
+</div>
+
+<!-- WHY EVERELT -->
+<div id="why">
+<div class="section">
+  <div class="section-header">
+    <span class="section-eyebrow" data-i18n="why.eyebrow"></span>
+    <h2 class="section-title" data-i18n="why.title"></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11l4.5 4.5L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="feature-title" data-i18n="why.f1t"></div><p class="feature-body" data-i18n="why.f1b"></p></div>
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="currentColor" stroke-width="1.3"/><path d="M11 7C9.343 7 8 8.343 8 10s1.343 3 3 3 3 1.343 3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 6v1M11 15v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="feature-title" data-i18n="why.f2t"></div><p class="feature-body" data-i18n="why.f2b"></p></div>
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="9" r="4" stroke="currentColor" stroke-width="1.3"/><path d="M4 19c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="feature-title" data-i18n="why.f3t"></div><p class="feature-body" data-i18n="why.f3b"></p></div>
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 6V11C19 15.5 15.5 19.5 11 20C6.5 19.5 3 15.5 3 11V6L11 2Z" stroke="currentColor" stroke-width="1.3"/><path d="M8 11l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="feature-title" data-i18n="why.f4t"></div><p class="feature-body" data-i18n="why.f4b"></p></div>
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="8" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M7 8V6C7 4.343 8.343 3 10 3h2c1.657 0 3 1.343 3 3v2" stroke="currentColor" stroke-width="1.3"/><circle cx="11" cy="14" r="1.5" fill="currentColor"/></svg></div><div class="feature-title" data-i18n="why.f5t"></div><p class="feature-body" data-i18n="why.f5b"></p></div>
+    <div class="feature"><div class="feature-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="3" width="14" height="16" rx="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 8h6M8 12h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="feature-title" data-i18n="why.f6t"></div><p class="feature-body" data-i18n="why.f6b"></p></div>
+  </div>
+</div>
+</div>
+
+<!-- COVERAGE WAEMU -->
+<div id="coverage" style="background:var(--bg2)">
+<div class="section">
+  <div class="section-header">
+    <span class="section-eyebrow" data-i18n="cov.eyebrow"></span>
+    <h2 class="section-title" data-i18n="cov.title"></h2>
+    <p class="section-sub" data-i18n="cov.sub"></p>
+  </div>
+  <div class="waemu-grid">
+    <div class="country-card live"><span class="country-flag">🇧🇯</span><div class="country-info"><div class="country-name" data-i18n="cov.benin"></div><div class="country-mno">MTN MoMo</div></div><span class="country-badge badge-live" data-i18n="cov.live"></span></div>
+    <div class="country-card"><span class="country-flag">🇨🇮</span><div class="country-info"><div class="country-name" data-i18n="cov.ci"></div><div class="country-mno">MTN, Orange</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇸🇳</span><div class="country-info"><div class="country-name" data-i18n="cov.sn"></div><div class="country-mno">Wave, Orange</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇲🇱</span><div class="country-info"><div class="country-name" data-i18n="cov.ml"></div><div class="country-mno">Orange, Moov</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇧🇫</span><div class="country-info"><div class="country-name" data-i18n="cov.bf"></div><div class="country-mno">Moov, Orange</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇹🇬</span><div class="country-info"><div class="country-name" data-i18n="cov.tg"></div><div class="country-mno">Flooz, T-Money</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇳🇪</span><div class="country-info"><div class="country-name" data-i18n="cov.ne"></div><div class="country-mno">Airtel, Orange</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+    <div class="country-card"><span class="country-flag">🇬🇼</span><div class="country-info"><div class="country-name" data-i18n="cov.gw"></div><div class="country-mno">Orange</div></div><span class="country-badge badge-soon" data-i18n="cov.soon"></span></div>
+  </div>
+  <p class="waemu-note" data-i18n="cov.note"></p>
+
+  <!-- WAITLIST -->
+  <div class="waitlist">
+    <div class="waitlist-title" data-i18n="wl.title"></div>
+    <p class="waitlist-sub" data-i18n="wl.sub"></p>
+    <form class="waitlist-form" onsubmit="submitWaitlist(event)">
+      <input type="email" class="waitlist-input" id="wl-email" data-i18n-ph="wl.placeholder" required>
+      <button type="submit" class="waitlist-btn" data-i18n="wl.btn"></button>
+    </form>
+    <div class="waitlist-success" id="wl-success">
+      <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9L7.5 13L14.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="wl.success"></span>
+    </div>
+    <p class="waitlist-note" data-i18n="wl.note"></p>
+  </div>
+</div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer"><strong data-i18n="disclaimer.bold"></strong> <span data-i18n="disclaimer.text"></span></div>
+
+<!-- PRICING -->
+<div style="background:var(--bg)">
+<div class="section">
+  <div class="section-header">
+    <span class="section-eyebrow" data-i18n="price.eyebrow"></span>
+    <h2 class="section-title" data-i18n="price.title"></h2>
+    <p class="section-sub" data-i18n="price.sub"></p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card"><div class="pricing-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 11l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="pricing-title" data-i18n="price.c1t"></div><p class="pricing-body" data-i18n="price.c1b"></p></div>
+    <div class="pricing-card"><div class="pricing-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 6V11C19 15.5 15.5 19.5 11 20C6.5 19.5 3 15.5 3 11V6L11 2Z" stroke="currentColor" stroke-width="1.3"/><path d="M8 11l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="pricing-title" data-i18n="price.c2t"></div><p class="pricing-body" data-i18n="price.c2b"></p></div>
+    <div class="pricing-card"><div class="pricing-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="4" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M7 9h8M7 13h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><div class="pricing-title" data-i18n="price.c3t"></div><p class="pricing-body" data-i18n="price.c3b"></p></div>
+  </div>
+</div>
+</div>
+
+<!-- SECURITY -->
+<div class="section-dark" style="padding:80px 0">
+<div class="section">
+  <div class="section-header">
+    <span class="section-eyebrow" data-i18n="sec.eyebrow"></span>
+    <h2 class="section-title" data-i18n="sec.title"></h2>
+    <p class="section-sub" data-i18n="sec.sub"></p>
+  </div>
+  <div class="sec-grid">
+    <div class="sec-card"><div class="sec-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="7" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 7V5.5C5.5 3.567 7.067 2 9 2s3.5 1.567 3.5 3.5V7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/></svg></div><span class="sec-text" data-i18n="sec.c1"></span></div>
+    <div class="sec-card"><div class="sec-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 9l2 2 3-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="sec-text" data-i18n="sec.c2"></span></div>
+    <div class="sec-card"><div class="sec-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M3 16c0-2.761 2.686-5 6-5s6 2.239 6 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="sec-text" data-i18n="sec.c3"></span></div>
+    <div class="sec-card"><div class="sec-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5V9C15 12.5 12.3 15.7 9 16.5C5.7 15.7 3 12.5 3 9V5L9 2Z" stroke="currentColor" stroke-width="1.3"/></svg></div><span class="sec-text" data-i18n="sec.c4"></span></div>
+  </div>
+  <p class="sec-note" data-i18n="sec.note"></p>
+</div>
+</div>
+
+<!-- FAQ -->
+<div id="faq" style="background:var(--bg2);padding:80px 0">
+<div class="section" style="padding-top:0;padding-bottom:0">
+  <div class="section-header" style="text-align:center">
+    <span class="section-eyebrow" style="display:block;text-align:center" data-i18n="faq.eyebrow"></span>
+    <h2 class="section-title" style="margin:0 auto" data-i18n="faq.title"></h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q1"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a1"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q2"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a2"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q3"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a3"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q4"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a4"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q5"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a5"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q6"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a6"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q7"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a7"></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span data-i18n="faq.q8"></span><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="faq-a" data-i18n="faq.a8"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2 data-i18n="cta.title"></h2>
+  <p data-i18n="cta.sub"></p>
+  <div class="cta-actions">
+    <a class="btn btn-gold" href="https://t.me/everelt_bot" target="_blank" data-i18n="cta.btn1"></a>
+    <a class="btn btn-outline-light" href="#" onclick="showPage('tos');return false" data-i18n="cta.btn2"></a>
+  </div>
+</div>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════════ PAGE TERMS OF SERVICE ═══════════════════ -->
+<div id="page-tos" class="page">
+
+<!-- FRENCH -->
+<div class="lang-block" data-lang="fr">
+<div class="legal-wrap">
+<h1>Conditions d'utilisation</h1>
+<p class="legal-meta">Dernière mise à jour : janvier 2026 · Version 2.0</p>
+<div class="legal-box"><p><strong>Avis important :</strong> Everelt est une plateforme technologique fournissant un service digital lié à la recharge de portefeuilles mobiles. Everelt n'est pas une banque, un établissement de paiement ni un opérateur de transfert de fonds. Everelt ne fournit pas de services financiers, n'exécute pas de virements et ne détient pas de fonds clients. Tout traitement de paiement est effectué par des prestataires de paiement agréés. L'exécution de la recharge des portefeuilles est assurée par des partenaires indépendants.</p></div>
+
+<h2>1. Objet</h2>
+<p>Les présentes Conditions d'utilisation (« Conditions ») régissent l'accès et l'utilisation du service digital Everelt (le « Service »), exploité par ИП Нуше Коджо Живрэ (ci-après « Everelt », « nous »), disponible via interface web et bot Telegram.</p>
+<p>Le Service fournit aux utilisateurs un accès digital à un service de recharge de portefeuilles mobiles en Afrique de l'Ouest (zone UEMOA). Everelt agit exclusivement en tant qu'intermédiaire technique facilitant l'initiation et la coordination des demandes de recharge.</p>
+
+<h2>2. Nature du service</h2>
+<p>Everelt fournit un service digital permettant aux utilisateurs de soumettre des demandes de recharge de portefeuilles mobiles via une interface technologique.</p>
+<p>Everelt agit uniquement en tant qu'intermédiaire technique. Everelt :</p>
+<ul>
+<li>n'exécute pas de transactions de paiement</li>
+<li>n'opère pas de comptes de paiement et ne contrôle pas de comptes de paiement</li>
+<li>ne gère pas ni ne détient de fonds clients</li>
+<li>ne fournit pas de services bancaires ou financiers</li>
+</ul>
+<p>Toutes les opérations financières sont effectuées par des prestataires de paiement agréés et des partenaires indépendants. <strong>Everelt ne contrôle, ne détient et n'opère aucun compte de paiement à quelque stade que ce soit de la transaction.</strong></p>
+<p>Le Service se limite à fournir un accès technique à l'infrastructure partenaire.</p>
+
+<h2>3. Flux de paiement et de fonds</h2>
+<p>En utilisant le Service, l'utilisateur règle le prix d'un service digital fourni par Everelt. Le paiement est traité par un prestataire de paiement agréé conformément à la réglementation applicable.</p>
+<p>Les fonds collectés sont transmis à l'infrastructure partenaire pour exécution de la demande de recharge. Everelt ne conserve pas les fonds clients au-delà du temps nécessaire à la coordination de la transaction.</p>
+
+<h2>4. Informations requises</h2>
+<p>Aucune création de compte n'est requise. Pour utiliser le Service, vous devez simplement fournir :</p>
+<ul>
+<li>Votre nom et prénom exacts</li>
+<li>Votre numéro de téléphone (vérifié par code OTP)</li>
+</ul>
+<p>Ces informations sont transmises à l'infrastructure partenaire pour le traitement et peuvent être utilisées à des fins de conformité LCB-FT.</p>
+
+<h2>5. Utilisation du Service</h2>
+<h3>5.1 Utilisateurs autorisés</h3>
+<p>Le Service est réservé aux personnes physiques majeures (18 ans ou plus) résidant en Russie, pour des demandes de recharge à destination de portefeuilles mobiles dans les pays de la zone UEMOA desservis par Everelt.</p>
+<h3>5.2 Utilisations interdites</h3>
+<p>Il est strictement interdit d'utiliser le Service pour :</p>
+<ul>
+<li>Contourner des sanctions internationales, des embargos ou des restrictions d'exportation</li>
+<li>Blanchiment d'argent, financement du terrorisme ou toute activité illicite</li>
+<li>Fraude ou usurpation d'identité</li>
+<li>Soumettre des demandes pour le compte de tiers non déclarés ou faciliter des recharges indirectes pour des bénéficiaires inconnus</li>
+<li>Toute utilisation contraire aux lois russes et aux lois du pays de destination</li>
+</ul>
+
+<h2>6. Exécution et délais</h2>
+<p>L'exécution de la recharge des portefeuilles est assurée par des partenaires tiers indépendants. Everelt ne garantit pas les délais d'exécution ni les résultats, et n'est pas responsable des retards ou échecs causés par les systèmes partenaires, les opérateurs mobiles ou les réseaux externes.</p>
+<p>La plupart des demandes de recharge sont traitées en moins de 15 minutes. Ce délai est indicatif et peut varier selon les conditions techniques des partenaires.</p>
+
+<h2>7. Responsabilité de l'utilisateur</h2>
+<p>L'utilisateur est seul responsable de l'exactitude de toutes les informations fournies, notamment :</p>
+<ul>
+<li>Le numéro du portefeuille mobile</li>
+<li>Le nom du titulaire du portefeuille mobile</li>
+</ul>
+<p>Everelt ne vérifie pas la propriété du portefeuille mobile et n'est pas responsable des erreurs résultant d'une saisie incorrecte. Aucun remboursement ne peut être garanti en cas d'erreur de saisie imputable à l'utilisateur.</p>
+<p>En soumettant une demande de recharge, l'utilisateur confirme qu'il est autorisé à initier une demande impliquant le portefeuille mobile spécifié.</p>
+
+<h2>8. Conformité LCB-FT</h2>
+<p>Everelt met en œuvre des procédures de conformité internes conformément à la législation applicable en matière de lutte contre le blanchiment des capitaux (loi fédérale n°115-FZ). Everelt peut :</p>
+<ul>
+<li>demander une vérification d'identité à tout moment</li>
+<li>retarder ou suspendre des transactions dans l'attente d'une vérification</li>
+<li>demander des informations supplémentaires concernant l'objet d'une transaction lorsque les procédures de conformité l'exigent</li>
+<li>refuser le service sans explication lorsque les obligations de conformité l'exigent</li>
+<li>signaler toute activité suspecte aux autorités compétentes (Rosfinmonitoring)</li>
+</ul>
+<p>Les utilisateurs acceptent de se conformer à toutes les lois applicables et confirment que les fonds utilisés sont d'origine licite.</p>
+
+<h2>9. Tarification</h2>
+<p>Le prix du Service est intégré dans le taux de change affiché. L'utilisateur confirme son acceptation du taux et du montant crédité sur le portefeuille avant tout paiement. Aucun frais supplémentaire n'est facturé au-delà du montant affiché.</p>
+<p>Le taux affiché est indicatif jusqu'à confirmation. Le taux définitif est confirmé à l'étape de paiement.</p>
+
+<h2>10. Remboursements</h2>
+<p>Des remboursements peuvent être accordés dans les cas où une transaction ne peut être exécutée en raison de problèmes techniques ou d'un refus côté partenaire. Le traitement du remboursement est soumis à la confirmation des prestataires de paiement et partenaires concernés, le cas échéant, et peut prendre jusqu'à 5 jours ouvrés.</p>
+<p>Aucun remboursement n'est garanti une fois qu'une transaction a été initiée avec succès et transmise à l'infrastructure partenaire.</p>
+
+<h2>11. Limitation de responsabilité</h2>
+<p>Le rôle d'Everelt se limite à fournir l'accès à une interface de service digital. Everelt ne saurait être considéré comme partie à une transaction financière exécutée par des partenaires. La responsabilité d'Everelt, le cas échéant, est strictement limitée au montant payé pour le service digital.</p>
+<p>Everelt ne peut être tenu responsable des retards, défaillances ou interruptions imputables à des partenaires tiers, des opérateurs mobiles, des réseaux bancaires ou des causes de force majeure.</p>
+
+<h2>12. Clause de qualification juridique</h2>
+<p>Le Service fourni par Everelt est un service digital et ne doit pas être interprété comme un service de transfert de fonds, de remise ou de paiement. Toute terminologie utilisée sur la plateforme l'est pour la commodité de l'utilisateur et ne reflète pas la nature juridique du Service.</p>
+
+<h2>13. Partage des données</h2>
+<p>Les données utilisateur peuvent être partagées avec des prestataires de paiement et des partenaires exclusivement à des fins de traitement des transactions et de conformité. Everelt n'utilise pas les données personnelles à des fins commerciales non liées.</p>
+<p>Le traitement de vos données personnelles est régi par notre <a href="#" onclick="showPage('privacy');return false">Politique de confidentialité</a>.</p>
+
+<h2>14. Droit applicable</h2>
+<p>Les présentes Conditions sont régies par le droit de la Fédération de Russie. Tout litige non résolu à l'amiable sera soumis à la juridiction compétente du lieu de domicile de l'opérateur.</p>
+
+<h2>15. Modifications</h2>
+<p>Everelt se réserve le droit de modifier les présentes Conditions à tout moment. Les utilisateurs sont informés par notification dans l'application. L'utilisation continue du Service après notification vaut acceptation des nouvelles conditions.</p>
+
+<h2>16. Contact</h2>
+<p>Pour toute question relative aux présentes Conditions : <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+<!-- RUSSIAN -->
+<div class="lang-block" data-lang="ru">
+<div class="legal-wrap">
+<h1>Условия использования</h1>
+<p class="legal-meta">Последнее обновление: январь 2026 г. · Версия 2.0</p>
+<div class="legal-box"><p><strong>Важное уведомление:</strong> Everelt является технологической платформой, предоставляющей цифровой сервис пополнения мобильных кошельков. Everelt не является банком, платёжной организацией или оператором денежных переводов. Everelt не предоставляет финансовых услуг, не исполняет переводов и не хранит средства клиентов. Все платежи обрабатываются лицензированными платёжными провайдерами. Исполнение пополнения кошельков обеспечивается независимыми партнёрами.</p></div>
+
+<h2>1. Предмет</h2>
+<p>Настоящие Условия использования («Условия») регулируют доступ к цифровому сервису Everelt («Сервис») и его использование. Сервис управляется ИП Нуше Коджо Живрэ (далее — «Everelt», «мы»), доступен через веб-интерфейс и Telegram-бот.</p>
+<p>Сервис предоставляет пользователям цифровой доступ к сервису пополнения мобильных кошельков в Западной Африке (зона UEMOA). Everelt действует исключительно как технический посредник, обеспечивающий инициирование и координацию запросов на пополнение.</p>
+
+<h2>2. Характер сервиса</h2>
+<p>Everelt предоставляет цифровой сервис, позволяющий пользователям подавать запросы на пополнение мобильных кошельков через технологический интерфейс.</p>
+<p>Everelt действует исключительно как технический посредник. Everelt:</p>
+<ul>
+<li>не исполняет платёжные транзакции</li>
+<li>не открывает платёжные счета и не управляет ими</li>
+<li>не хранит средства клиентов и не управляет ими</li>
+<li>не предоставляет банковских или финансовых услуг</li>
+</ul>
+<p>Все финансовые операции осуществляются лицензированными платёжными провайдерами и независимыми партнёрами. <strong>Everelt не контролирует, не хранит средства на платёжных счетах и не управляет ими на любом этапе транзакции.</strong></p>
+<p>Сервис ограничен предоставлением технического доступа к партнёрской инфраструктуре.</p>
+
+<h2>3. Движение платежей и средств</h2>
+<p>Используя Сервис, пользователь оплачивает цифровой сервис, предоставляемый Everelt. Платёж обрабатывается лицензированным платёжным провайдером в соответствии с применимым законодательством.</p>
+<p>Собранные средства передаются в партнёрскую инфраструктуру для исполнения запроса на пополнение. Everelt не удерживает средства клиентов дольше, чем необходимо для координации транзакции.</p>
+
+<h2>4. Требуемые данные</h2>
+<p>Создание учётной записи не требуется. Для использования Сервиса необходимо предоставить:</p>
+<ul>
+<li>Точные имя и фамилию</li>
+<li>Номер телефона (подтверждённый OTP-кодом)</li>
+</ul>
+<p>Эти данные передаются в партнёрскую инфраструктуру для обработки и могут использоваться в целях соблюдения требований ПОД/ФТ.</p>
+
+<h2>5. Использование Сервиса</h2>
+<h3>5.1 Авторизованные пользователи</h3>
+<p>Сервис предназначен для физических лиц, достигших 18 лет и проживающих в России, для подачи запросов на пополнение мобильных кошельков в странах зоны UEMOA, обслуживаемых Everelt.</p>
+<h3>5.2 Запрещённое использование</h3>
+<p>Использование Сервиса в следующих целях строго запрещено:</p>
+<ul>
+<li>Обход международных санкций, эмбарго и экспортных ограничений</li>
+<li>Отмывание денег, финансирование терроризма и любая незаконная деятельность</li>
+<li>Мошенничество и кража персональных данных</li>
+<li>Подача запросов от имени незадекларированных третьих лиц или содействие косвенному пополнению неизвестных получателей</li>
+<li>Любое использование, противоречащее российскому законодательству и законодательству страны назначения</li>
+</ul>
+
+<h2>6. Исполнение и сроки</h2>
+<p>Исполнение пополнения кошельков обеспечивается независимыми сторонними партнёрами. Everelt не гарантирует сроки или результаты исполнения и не несёт ответственности за задержки или сбои, вызванные системами партнёров, мобильными операторами или внешними сетями.</p>
+<p>Большинство запросов на пополнение обрабатываются менее чем за 15 минут. Этот срок является ориентировочным и может варьироваться в зависимости от технических условий партнёров.</p>
+
+<h2>7. Ответственность пользователя</h2>
+<p>Пользователь несёт единоличную ответственность за точность всех предоставленных данных, включая:</p>
+<ul>
+<li>Номер целевого мобильного кошелька</li>
+<li>Имя владельца мобильного кошелька</li>
+</ul>
+<p>Everelt не проверяет принадлежность указанного мобильного кошелька и не несёт ответственности за ошибки, возникшие вследствие неверного ввода данных. Возврат средств не может быть гарантирован в случае ошибки ввода, допущенной пользователем.</p>
+<p>Подавая запрос на пополнение, пользователь подтверждает, что уполномочен инициировать запрос, связанный с указанным мобильным кошельком.</p>
+
+<h2>8. Соответствие требованиям ПОД/ФТ</h2>
+<p>Everelt реализует внутренние процедуры compliance в соответствии с применимым законодательством о противодействии отмыванию денег (ФЗ №115-ФЗ). Everelt вправе:</p>
+<ul>
+<li>в любое время запросить верификацию личности</li>
+<li>задержать или приостановить транзакции до завершения проверки</li>
+<li>запросить дополнительную информацию о цели транзакции, если этого требуют процедуры compliance</li>
+<li>отказать в обслуживании без объяснения причин, если этого требуют обязательства по compliance</li>
+<li>сообщить о подозрительной деятельности в компетентные органы (Росфинмониторинг)</li>
+</ul>
+<p>Пользователи соглашаются соблюдать все применимые законы и подтверждают, что используемые средства имеют законное происхождение.</p>
+
+<h2>9. Тарификация</h2>
+<p>Стоимость Сервиса включена в отображаемый обменный курс. Пользователь подтверждает принятие курса и итоговой суммы к зачислению до совершения платежа. Никаких дополнительных комиссий сверх отображаемой суммы не взимается.</p>
+<p>Отображаемый курс является индикативным до подтверждения. Окончательный курс подтверждается на шаге оплаты.</p>
+
+<h2>10. Возвраты</h2>
+<p>Возвраты могут быть произведены в случаях, когда транзакция не может быть исполнена по техническим причинам или вследствие отказа со стороны партнёра. Обработка возврата осуществляется при наличии подтверждения от соответствующих платёжных провайдеров и партнёров и может занять до 5 рабочих дней.</p>
+<p>Возврат не гарантируется после того, как транзакция была успешно инициирована и передана в партнёрскую инфраструктуру.</p>
+
+<h2>11. Ограничение ответственности</h2>
+<p>Роль Everelt ограничивается предоставлением доступа к интерфейсу цифрового сервиса. Everelt не является стороной каких-либо финансовых транзакций, исполняемых партнёрами. Ответственность Everelt, если таковая имеется, строго ограничена суммой, уплаченной за цифровой сервис.</p>
+<p>Everelt не несёт ответственности за задержки, сбои или перебои, вызванные сторонними партнёрами, мобильными операторами, банковскими сетями или обстоятельствами непреодолимой силы.</p>
+
+<h2>12. Квалификационная оговорка</h2>
+<p>Сервис, предоставляемый Everelt, является цифровым сервисом и не должен толковаться как услуга по переводу денег, денежному переводу или платёжная услуга. Любая терминология, используемая на платформе, применяется исключительно для удобства пользователей и не отражает юридическую природу Сервиса.</p>
+
+<h2>13. Передача данных</h2>
+<p>Данные пользователей могут передаваться платёжным провайдерам и партнёрам исключительно в целях обработки транзакций и обеспечения compliance. Everelt не использует персональные данные в несвязанных коммерческих целях.</p>
+<p>Обработка ваших персональных данных регулируется нашей <a href="#" onclick="showPage('privacy');return false">Политикой конфиденциальности</a>.</p>
+
+<h2>14. Применимое право</h2>
+<p>Настоящие Условия регулируются законодательством Российской Федерации. Любой спор, не урегулированный в досудебном порядке, передаётся на рассмотрение компетентного суда по месту нахождения оператора.</p>
+
+<h2>15. Изменения</h2>
+<p>Everelt оставляет за собой право изменять настоящие Условия в любое время. Пользователи уведомляются через приложение. Продолжение использования Сервиса после уведомления означает принятие новых условий.</p>
+
+<h2>16. Контакты</h2>
+<p>По вопросам, связанным с настоящими Условиями: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+<!-- ENGLISH -->
+<div class="lang-block" data-lang="en">
+<div class="legal-wrap">
+<h1>Terms of Service</h1>
+<p class="legal-meta">Last updated: January 2026 · Version 2.0</p>
+<div class="legal-box"><p><strong>Important notice:</strong> Everelt is a technology platform providing a digital service related to mobile wallet funding. Everelt is not a bank, a payment institution, or a money transfer operator. Everelt does not provide financial services, does not execute transfers, and does not hold client funds. All payment processing is performed by licensed payment providers. Execution of wallet funding is performed by independent partners.</p></div>
+
+<h2>1. Purpose</h2>
+<p>These Terms of Service ("Terms") govern access to and use of the Everelt digital service (the "Service"), operated by ИП Нуше Коджо Живрэ (hereinafter "Everelt", "we"), available via web interface and Telegram bot.</p>
+<p>The Service provides users with digital access to a mobile wallet funding service in West Africa (UEMOA zone). Everelt acts solely as a technical intermediary facilitating the initiation and coordination of wallet funding requests.</p>
+
+<h2>2. Nature of the Service</h2>
+<p>Everelt provides a digital service enabling users to submit mobile wallet funding requests through a technology interface.</p>
+<p>Everelt acts solely as a technical intermediary. Everelt does not:</p>
+<ul>
+<li>execute payment transactions</li>
+<li>operate or control payment accounts</li>
+<li>manage or hold client funds</li>
+<li>provide banking or financial services</li>
+</ul>
+<p>All financial operations are carried out by licensed payment providers and independent partners. <strong>Everelt does not control, hold, or operate payment accounts at any stage of the transaction.</strong></p>
+<p>The Service is limited to providing technical access to partner infrastructure.</p>
+
+<h2>3. Payment and Fund Flow</h2>
+<p>When using the Service, the user pays for a digital service provided by Everelt. Payment is processed by a licensed payment provider in accordance with applicable regulations.</p>
+<p>Funds collected are transmitted to partner infrastructure for execution of the requested wallet funding. Everelt does not retain client funds beyond the time necessary for transaction coordination.</p>
+
+<h2>4. Required Information</h2>
+<p>No account creation is required. To use the Service, you simply need to provide:</p>
+<ul>
+<li>Your exact first and last name</li>
+<li>Your phone number (verified via OTP)</li>
+</ul>
+<p>This information is transmitted to partner infrastructure for processing and may be used for AML compliance purposes.</p>
+
+<h2>5. Use of the Service</h2>
+<h3>5.1 Authorised Users</h3>
+<p>The Service is reserved for individuals aged 18 or over residing in Russia, for wallet funding requests to mobile wallets in UEMOA-zone countries served by Everelt.</p>
+<h3>5.2 Prohibited Uses</h3>
+<p>It is strictly prohibited to use the Service for:</p>
+<ul>
+<li>Circumventing international sanctions, embargoes, or export restrictions</li>
+<li>Money laundering, terrorist financing, or any unlawful activity</li>
+<li>Fraud or identity theft</li>
+<li>Submitting requests on behalf of undisclosed third parties or facilitating indirect funding for unknown beneficiaries</li>
+<li>Any use contrary to Russian law or the laws of the destination country</li>
+</ul>
+
+<h2>6. Execution and Timing</h2>
+<p>Execution of wallet funding is performed by independent third-party partners. Everelt does not guarantee execution times or outcomes and is not responsible for delays or failures caused by partner systems, mobile operators, or external networks.</p>
+<p>Most wallet funding requests are processed in under 15 minutes. This is indicative and may vary depending on partner technical conditions.</p>
+
+<h2>7. User Responsibility</h2>
+<p>The user is solely responsible for the accuracy of all information provided, including:</p>
+<ul>
+<li>The destination mobile wallet number</li>
+<li>The name of the mobile wallet owner</li>
+</ul>
+<p>Everelt does not verify ownership of the destination wallet and is not responsible for errors resulting from incorrect input. No refund can be guaranteed where a transaction failure results from user input error.</p>
+<p>By submitting a wallet funding request, the user confirms that they are authorised to initiate a request involving the specified mobile wallet.</p>
+
+<h2>8. AML Compliance</h2>
+<p>Everelt implements internal compliance procedures in accordance with applicable anti-money laundering legislation (Federal Law No. 115-FZ). Everelt may:</p>
+<ul>
+<li>request identity verification at any time</li>
+<li>delay or suspend transactions pending verification</li>
+<li>request additional information regarding the purpose of a transaction where required by compliance procedures</li>
+<li>refuse service without explanation where required by compliance obligations</li>
+<li>report suspicious activity to competent authorities (Rosfinmonitoring)</li>
+</ul>
+<p>Users agree to comply with all applicable laws and confirm that funds used are of lawful origin.</p>
+
+<h2>9. Pricing</h2>
+<p>The price of the Service is embedded in the displayed exchange rate. The user confirms acceptance of the rate and the amount credited to the wallet prior to payment. No additional fees are charged beyond the displayed amount.</p>
+<p>The displayed rate is indicative until confirmation. The final rate is confirmed at the payment step.</p>
+
+<h2>10. Refunds</h2>
+<p>Refunds may be issued in cases where a transaction cannot be executed due to technical issues or partner-side rejection. Refund processing is subject to confirmation from the relevant payment providers and partners, where applicable, and may take up to 5 business days.</p>
+<p>No refund is guaranteed once a transaction has been successfully initiated and transmitted to partner infrastructure.</p>
+
+<h2>11. Limitation of Liability</h2>
+<p>Everelt's role is limited to providing access to a digital service interface. Everelt shall not be considered a party to any financial transaction executed by partners. Liability, if any, is strictly limited to the amount paid for the digital service.</p>
+<p>Everelt shall not be liable for delays, failures, or interruptions caused by third-party partners, mobile operators, banking networks, or force majeure events.</p>
+
+<h2>12. Legal Positioning Clause</h2>
+<p>The Service provided by Everelt is a digital service and shall not be interpreted as a money transfer, remittance, or payment service. Any terminology used on the platform is for user convenience only and does not reflect the legal nature of the Service.</p>
+
+<h2>13. Data Sharing</h2>
+<p>User data may be shared with payment providers and partners strictly for transaction processing and compliance purposes. Everelt does not use personal data for unrelated commercial purposes.</p>
+<p>The processing of your personal data is governed by our <a href="#" onclick="showPage('privacy');return false">Privacy Policy</a>.</p>
+
+<h2>14. Governing Law</h2>
+<p>These Terms are governed by the law of the Russian Federation. Any dispute not resolved amicably shall be submitted to the competent court at the operator's place of business.</p>
+
+<h2>15. Amendments</h2>
+<p>Everelt reserves the right to amend these Terms at any time. Users are notified via in-app notification. Continued use of the Service after notification constitutes acceptance of the updated terms.</p>
+
+<h2>16. Contact</h2>
+<p>For any questions regarding these Terms: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+</div><!-- /page-tos -->
+
+<!-- ═══════════════════ PAGE PRIVACY POLICY ═══════════════════ -->
+<div id="page-privacy" class="page">
+
+<div class="lang-block" data-lang="fr">
+<div class="legal-wrap">
+<h1>Politique de confidentialité</h1>
+<p class="legal-meta">Dernière mise à jour : janvier 2026 · Conforme à la loi fédérale russe n°152-FZ</p>
+<div class="legal-box"><p>Everelt s'engage à protéger vos données personnelles. Cette politique explique quelles données nous collectons, pourquoi nous les traitons et comment elles sont protégées.</p></div>
+<h2>1. Responsable du traitement</h2>
+<p>ИП Нуше Коджо Живрэ, opérateur de la plateforme Everelt, est responsable du traitement de vos données personnelles conformément à la loi fédérale russe n°152-FZ sur les données personnelles.</p>
+<h2>2. Données collectées</h2>
+<h3>2.1 Données d'inscription</h3>
+<ul>
+<li>Nom et prénom</li>
+<li>Numéro de téléphone (vérifié par OTP)</li>
+</ul>
+<h3>2.2 Données de transaction</h3>
+<ul>
+<li>Montants envoyés et reçus</li>
+<li>Numéro de téléphone du portefeuille mobile</li>
+<li>Taux de change appliqué</li>
+<li>Horodatage des transactions</li>
+<li>Statut des paiements</li>
+</ul>
+<h3>2.3 Données techniques</h3>
+<ul>
+<li>Adresse IP et données de session</li>
+<li>Type d'appareil et navigateur</li>
+</ul>
+<h3>2.4 Données de conformité</h3>
+<ul>
+<li>Documents d'identité (le cas échéant, en cas de dépassement de seuil)</li>
+<li>Résultats des contrôles de sanctions</li>
+</ul>
+<h2>3. Finalités du traitement</h2>
+<p>Vos données sont utilisées pour :</p>
+<ul>
+<li>Traiter vos transactions et vérifier leur conformité aux obligations LCB-FT</li>
+<li>Respecter nos obligations légales (loi n°115-FZ, loi n°152-FZ)</li>
+<li>Transmettre les informations nécessaires à nos partenaires de paiement pour l'exécution des transactions</li>
+<li>Vous contacter en cas de problème avec une transaction ou votre compte</li>
+<li>Améliorer nos services</li>
+</ul>
+<h2>4. Partage des données</h2>
+<p>Vos données peuvent être partagées avec :</p>
+<ul>
+<li><strong>Robokassa</strong> — pour le traitement des paiements en Russie</li>
+<li><strong>Nos partenaires de paiement dans les pays de destination</strong> — pour l'exécution des transactions (nom, numéro de portefeuille, montant)</li>
+<li><strong>Rosfinmonitoring</strong> — en cas d'obligation légale de déclaration</li>
+</ul>
+<p>Vos données ne sont jamais vendues à des tiers à des fins commerciales.</p>
+<h2>5. Conservation des données</h2>
+<p>Les données fournies lors d'une transaction sont conservées pendant <strong>5 ans</strong> à compter de la date de la transaction, conformément aux obligations légales russes en matière de LCB-FT.</p>
+<h2>6. Vos droits</h2>
+<p>Conformément à la loi n°152-FZ, vous disposez des droits suivants :</p>
+<ul>
+<li><strong>Droit d'accès</strong> — obtenir une copie de vos données personnelles</li>
+<li><strong>Droit de rectification</strong> — corriger des données inexactes</li>
+<li><strong>Droit à l'effacement</strong> — demander la suppression, sous réserve des obligations légales de conservation</li>
+<li><strong>Droit d'opposition</strong> — vous opposer au traitement dans certains cas</li>
+</ul>
+<p>Pour exercer ces droits : <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+<h2>7. Sécurité</h2>
+<p>Vos données sont stockées sur des serveurs sécurisés avec chiffrement en transit et au repos. L'accès est restreint aux personnels et systèmes strictement nécessaires au traitement des transactions.</p>
+<h2>8. Contact</h2>
+<p>Pour toute question relative à la protection de vos données : <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+<div class="lang-block" data-lang="ru">
+<div class="legal-wrap">
+<h1>Политика конфиденциальности</h1>
+<p class="legal-meta">Последнее обновление: январь 2026 г. · Соответствует Федеральному закону РФ №152-ФЗ</p>
+<div class="legal-box"><p>Everelt обязуется защищать ваши персональные данные. Настоящая политика объясняет, какие данные мы собираем, с какой целью и как их защищаем.</p></div>
+<h2>1. Оператор персональных данных</h2>
+<p>ИП Нуше Коджо Живрэ, оператор платформы Everelt, является оператором обработки ваших персональных данных в соответствии с Федеральным законом РФ №152-ФЗ «О персональных данных».</p>
+<h2>2. Собираемые данные</h2>
+<h3>2.1 Данные при регистрации</h3>
+<ul>
+<li>Имя и фамилия</li>
+<li>Номер телефона (подтверждённый OTP)</li>
+</ul>
+<h3>2.2 Данные транзакций</h3>
+<ul>
+<li>Суммы отправленных и полученных средств</li>
+<li>Номер телефона мобильного кошелька</li>
+<li>Применённый обменный курс</li>
+<li>Временные метки транзакций</li>
+<li>Статус платежей</li>
+</ul>
+<h3>2.3 Технические данные</h3>
+<ul>
+<li>IP-адрес и данные сессии</li>
+<li>Тип устройства и браузера</li>
+</ul>
+<h3>2.4 Данные для соответствия требованиям</h3>
+<ul>
+<li>Документы, удостоверяющие личность (при необходимости, при превышении пороговых значений)</li>
+<li>Результаты проверок по санкционным спискам</li>
+</ul>
+<h2>3. Цели обработки</h2>
+<p>Ваши данные используются для:</p>
+<ul>
+<li>Обработки транзакций и проверки их соответствия требованиям ПОД/ФТ</li>
+<li>Выполнения законодательных обязательств (ФЗ №115-ФЗ, ФЗ №152-ФЗ)</li>
+<li>Передачи необходимых сведений нашим платёжным партнёрам для исполнения транзакций</li>
+<li>Связи с вами при возникновении проблем с транзакцией или учётной записью</li>
+<li>Улучшения наших сервисов</li>
+</ul>
+<h2>4. Передача данных третьим лицам</h2>
+<p>Ваши данные могут быть переданы:</p>
+<ul>
+<li><strong>Robokassa</strong> — для обработки платежей в России</li>
+<li><strong>Нашим платёжным партнёрам в странах назначения</strong> — для исполнения транзакций (имя, номер кошелька, сумма)</li>
+<li><strong>Росфинмониторинг</strong> — при наличии законодательного обязательства по сообщению</li>
+</ul>
+<p>Ваши данные никогда не продаются третьим лицам в коммерческих целях.</p>
+<h2>5. Хранение данных</h2>
+<p>Данные, предоставленные при совершении транзакции, хранятся в течение <strong>5 лет</strong> с даты транзакции в соответствии с российскими законодательными требованиями в области ПОД/ФТ.</p>
+<h2>6. Ваши права</h2>
+<p>В соответствии с ФЗ №152-ФЗ вы имеете следующие права:</p>
+<ul>
+<li><strong>Право на доступ</strong> — получить копию своих персональных данных</li>
+<li><strong>Право на исправление</strong> — исправить неточные данные</li>
+<li><strong>Право на удаление</strong> — запросить удаление, с учётом обязательных сроков хранения</li>
+<li><strong>Право на возражение</strong> — возразить против обработки в определённых случаях</li>
+</ul>
+<p>Для реализации указанных прав: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+<h2>7. Безопасность</h2>
+<p>Ваши данные хранятся на защищённых серверах с шифрованием при передаче и хранении. Доступ ограничен сотрудниками и системами, строго необходимыми для обработки транзакций.</p>
+<h2>8. Контакты</h2>
+<p>По вопросам защиты персональных данных: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+<div class="lang-block" data-lang="en">
+<div class="legal-wrap">
+<h1>Privacy Policy</h1>
+<p class="legal-meta">Last updated: January 2026 · Compliant with Russian Federal Law No. 152-FZ</p>
+<div class="legal-box"><p>Everelt is committed to protecting your personal data. This policy explains what data we collect, why we process it, and how it is protected.</p></div>
+<h2>1. Data Controller</h2>
+<p>ИП Нуше Коджо Живрэ, operator of the Everelt platform, is the data controller for your personal data in accordance with Russian Federal Law No. 152-FZ on Personal Data.</p>
+<h2>2. Data Collected</h2>
+<h3>2.1 Registration Data</h3>
+<ul>
+<li>First and last name</li>
+<li>Phone number (verified via OTP)</li>
+</ul>
+<h3>2.2 Transaction Data</h3>
+<ul>
+<li>Amounts sent and received</li>
+<li>Mobile wallet phone number</li>
+<li>Applied exchange rate</li>
+<li>Transaction timestamps</li>
+<li>Payment status</li>
+</ul>
+<h3>2.3 Technical Data</h3>
+<ul>
+<li>IP address and session data</li>
+<li>Device type and browser</li>
+</ul>
+<h3>2.4 Compliance Data</h3>
+<ul>
+<li>Identity documents (where applicable, upon threshold breach)</li>
+<li>Sanctions screening results</li>
+</ul>
+<h2>3. Purposes of Processing</h2>
+<p>Your data is used to:</p>
+<ul>
+<li>Process your transactions and verify their compliance with AML obligations</li>
+<li>Comply with legal obligations (Federal Law No. 115-FZ, No. 152-FZ)</li>
+<li>Transmit necessary information to our payment partners for transaction execution</li>
+<li>Contact you in the event of a problem with a transaction or your account</li>
+<li>Improve our services</li>
+</ul>
+<h2>4. Data Sharing</h2>
+<p>Your data may be shared with:</p>
+<ul>
+<li><strong>Robokassa</strong> — for payment processing in Russia</li>
+<li><strong>Our payment partners in destination countries</strong> — for transaction execution (name, wallet number, amount)</li>
+<li><strong>Rosfinmonitoring</strong> — where legally required to report</li>
+</ul>
+<p>Your data is never sold to third parties for commercial purposes.</p>
+<h2>5. Data Retention</h2>
+<p>Data provided during a transaction is retained for <strong>5 years</strong> from the transaction date, in accordance with Russian AML legal requirements.</p>
+<h2>6. Your Rights</h2>
+<p>Under Federal Law No. 152-FZ, you have the following rights:</p>
+<ul>
+<li><strong>Right of access</strong> — obtain a copy of your personal data</li>
+<li><strong>Right of rectification</strong> — correct inaccurate data</li>
+<li><strong>Right of erasure</strong> — request deletion, subject to mandatory retention obligations</li>
+<li><strong>Right to object</strong> — object to processing in certain cases</li>
+</ul>
+<p>To exercise these rights: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+<h2>7. Security</h2>
+<p>Your data is stored on secure servers with encryption in transit and at rest. Access is restricted to staff and systems strictly necessary for transaction processing.</p>
+<h2>8. Contact</h2>
+<p>For any questions regarding your data: <a href="mailto:info@everelt.com">info@everelt.com</a></p>
+</div>
+</div>
+
+</div><!-- /page-privacy -->
+
+<!-- ═══════════════════ PAGE ABOUT ═══════════════════ -->
+<div id="page-about" class="page">
+
+<div class="lang-block" data-lang="fr">
+<div class="legal-wrap">
+<h1>À propos d'Everelt</h1>
+<p class="legal-meta">Service digital de recharge de portefeuilles mobiles · Russie → Afrique de l'Ouest</p>
+<h2>Notre mission</h2>
+<p>Everelt a été créé pour simplifier l'accès à la recharge de portefeuilles mobiles entre la Russie et l'Afrique de l'Ouest. Nous savons que chaque recharge représente un lien entre des familles et des proches séparés par des milliers de kilomètres. Notre mission est de rendre ce lien aussi simple, rapide et transparent que possible.</p>
+<h2>Ce que nous faisons</h2>
+<p>Everelt est un service digital qui fournit un accès technologique à la recharge de portefeuilles mobiles en Afrique de l'Ouest. Nous ne sommes pas une banque, nous ne gérons pas de comptes de paiement et nous ne détenons pas de fonds clients. Chaque étape du processus — de la collecte en roubles au versement en francs CFA — est exécutée via une infrastructure partenaire indépendante.</p>
+<h2>Notre approche</h2>
+<ul>
+<li><strong>Transparence :</strong> Le taux tout compris et le montant crédité sur le portefeuille sont affichés avant confirmation. Aucun frais caché.</li>
+<li><strong>Conformité :</strong> Nous respectons les réglementations russes et les réglementations locales des pays de destination.</li>
+<li><strong>Fiabilité :</strong> Nous travaillons avec des partenaires établis pour garantir l'exécution des recharges.</li>
+<li><strong>Accessibilité :</strong> Notre service est disponible via Telegram et navigateur web, sans installation.</li>
+</ul>
+<h2>Zone de couverture</h2>
+<p>Nous couvrons actuellement le Bénin, avec une expansion rapide vers les sept autres pays de la zone UEMOA : Côte d'Ivoire, Sénégal, Mali, Burkina Faso, Togo, Niger et Guinée-Bissau. Ces pays partagent le franc CFA (XOF), une monnaie stable à parité fixe avec l'euro.</p>
+<h2>Informations légales</h2>
+<p>Everelt est opéré par ИП Нуше Коджо Живрэ, enregistré en Fédération de Russie. Les paiements en Russie sont traités par Robokassa, opérateur de paiement agréé par la Banque de Russie.</p>
+<p>Everelt est un service digital. Everelt n'est pas un établissement de paiement, une banque, ni un opérateur de remise de fonds. Everelt ne contrôle pas de comptes de paiement et n'exécute pas de virements. Nous agissons exclusivement comme intermédiaire technique.</p>
+<h2>Contact</h2>
+<p>Support : <a href="mailto:support@everelt.com">support@everelt.com</a></p>
+<p>Telegram : <a href="https://t.me/everelt_support" target="_blank">@everelt_support</a></p>
+</div>
+</div>
+
+<div class="lang-block" data-lang="ru">
+<div class="legal-wrap">
+<h1>О компании Everelt</h1>
+<p class="legal-meta">Цифровой сервис пополнения мобильных кошельков · Россия → Западная Африка</p>
+<h2>Наша миссия</h2>
+<p>Everelt создан для упрощения доступа к сервису пополнения мобильных кошельков между Россией и Западной Африкой. Мы понимаем, что каждое пополнение — это связь между семьями и близкими людьми, разделёнными тысячами километров. Наша миссия — сделать эту связь максимально простой, быстрой и прозрачной.</p>
+<h2>Что мы делаем</h2>
+<p>Everelt — цифровой сервис, предоставляющий технологический доступ к пополнению мобильных кошельков в Западной Африке. Мы не являемся банком, не управляем платёжными счетами и не храним средства клиентов. Каждый этап процесса — от сбора средств в рублях до выплаты во франках КФА — исполняется через независимую партнёрскую инфраструктуру.</p>
+<h2>Наш подход</h2>
+<ul>
+<li><strong>Прозрачность:</strong> Единый курс и сумма к зачислению отображаются до подтверждения. Никаких скрытых комиссий.</li>
+<li><strong>Соответствие требованиям:</strong> Мы соблюдаем российское законодательство и местное законодательство стран назначения.</li>
+<li><strong>Надёжность:</strong> Мы работаем с проверенными партнёрами для гарантированного исполнения пополнений.</li>
+<li><strong>Доступность:</strong> Сервис доступен через Telegram и веб-браузер без установки приложений.</li>
+</ul>
+<h2>Зона покрытия</h2>
+<p>В настоящее время мы работаем в Бенине и активно расширяемся на другие семь стран зоны UEMOA: Кот-д'Ивуар, Сенегал, Мали, Буркина-Фасо, Того, Нигер и Гвинея-Бисау. Все эти страны используют франк КФА (XOF) — стабильную валюту с фиксированным курсом к евро.</p>
+<h2>Юридическая информация</h2>
+<p>Everelt управляется ИП Нуше Коджо Живрэ, зарегистрированным в Российской Федерации. Платежи в России обрабатываются через Robokassa — платёжного оператора, лицензированного Банком России.</p>
+<p>Everelt является цифровым сервисом. Everelt не является платёжной организацией, банком или оператором денежных переводов. Everelt не управляет платёжными счетами и не исполняет переводов. Мы действуем исключительно как технический посредник.</p>
+<h2>Контакты</h2>
+<p>Поддержка: <a href="mailto:support@everelt.com">support@everelt.com</a></p>
+<p>Telegram: <a href="https://t.me/everelt_support" target="_blank">@everelt_support</a></p>
+</div>
+</div>
+
+<div class="lang-block" data-lang="en">
+<div class="legal-wrap">
+<h1>About Everelt</h1>
+<p class="legal-meta">Digital service for mobile wallet funding · Russia → West Africa</p>
+<h2>Our Mission</h2>
+<p>Everelt was created to simplify payments between Russia and West Africa. We know that every transaction represents a connection between families and loved ones separated by thousands of kilometres. Our mission is to make that connection as simple, fast, and transparent as possible.</p>
+<h2>What We Do</h2>
+<p>Everelt is a technology platform that provides digital access to a mobile wallet funding service in West Africa. We are not a bank and we do not hold client funds. Every step of the process — from payment collection in rubles to delivery in CFA francs — is executed through independent partner infrastructure.</p>
+<h2>Our Approach</h2>
+<ul>
+<li><strong>Transparency:</strong> The all-inclusive rate and amount credited to the wallet are displayed before confirmation. No hidden charges.</li>
+<li><strong>Compliance:</strong> We comply with Russian regulations and the local regulations of destination countries.</li>
+<li><strong>Reliability:</strong> We work with established partners to support the execution of wallet funding requests.</li>
+<li><strong>Accessibility:</strong> Our service is available via Telegram and web browser, with no installation required.</li>
+</ul>
+<h2>Coverage Area</h2>
+<p>We currently cover Benin, with rapid expansion across the other seven UEMOA-zone countries: Côte d'Ivoire, Senegal, Mali, Burkina Faso, Togo, Niger, and Guinea-Bissau. These countries share the CFA franc (XOF), a stable currency with a fixed parity to the euro.</p>
+<h2>Legal Information</h2>
+<p>Everelt is operated by ИП Нуше Коджо Живрэ, registered in the Russian Federation. Payments in Russia are processed by Robokassa, a payment operator licensed by the Bank of Russia.</p>
+<p>Everelt is a digital service. Everelt is not a payment institution, a bank, or a money remittance operator. Everelt does not control payment accounts and does not execute transfers. We act exclusively as a technical intermediary.</p>
+<h2>Contact</h2>
+<p>Support: <a href="mailto:support@everelt.com">support@everelt.com</a></p>
+<p>Telegram: <a href="https://t.me/everelt_support" target="_blank">@everelt_support</a></p>
+</div>
+</div>
+
+</div><!-- /page-about -->
+
+<!-- ═══ FOOTER (shared) ═══ -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <img src="https://ngivray.wordpress.com/wp-content/uploads/2026/04/photo_2026-04-18-16.38.54-1-1.jpeg" class="logo-img-footer" alt="Everelt" onclick="showPage('home')">
+      <p class="footer-tagline" data-i18n="footer.tagline"></p>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.col1"></h4>
+      <ul>
+        <li><a onclick="showPage('home')" data-i18n="footer.home"></a></li>
+        <li><a href="#how-it-works" onclick="scrollToSection('how-it-works')" data-i18n="nav.how"></a></li>
+        <li><a href="#coverage" onclick="scrollToSection('coverage')" data-i18n="nav.cov"></a></li>
+        <li><a href="#faq" onclick="scrollToSection('faq')" data-i18n="nav.faq"></a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.col2"></h4>
+      <ul>
+        <li><a onclick="showPage('tos')" data-i18n="footer.tos"></a></li>
+        <li><a onclick="showPage('privacy')" data-i18n="footer.privacy"></a></li>
+        <li><a onclick="showPage('about')" data-i18n="footer.about"></a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-i18n="footer.col3"></h4>
+      <ul>
+        <li><a href="mailto:support@everelt.com">support@everelt.com</a></li>
+        <li><a href="https://t.me/everelt_support" target="_blank">@everelt_support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy" data-i18n="footer.copy"></p>
+    <p class="footer-compliance" data-i18n="footer.compliance"></p>
+  </div>
+</footer>
+
+<script>
+// ─── RATE CONFIG ──────────────────────────────────────────────
+// Replace RATE_URL with your Cloudflare Worker URL once deployed
+// e.g. 'https://everelt-rate.YOUR-SUBDOMAIN.workers.dev/rate'
+const RATE_URL = 'https://everelt-workerjs.ngivray.workers.dev/rate';
+const RATE_FALLBACK = 7.00; // used if the worker is unreachable
+let RATE = RATE_FALLBACK;
+
+async function loadRate() {
+  try {
+    const res = await fetch(RATE_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('non-200');
+    const data = await res.json();
+    if (typeof data.rate === 'number' && data.rate > 0) {
+      RATE = data.rate;
+    }
+    // Auto-detect language from country — only if user has NOT made an explicit choice
+    // and the URL doesn't already specify a language
+    if (!localStorage.getItem('ev_lang_chosen') && data.visitor_country) {
+      const { l: urlLang } = parseURL();
+      const urlHasLang = window.location.pathname.split('/').filter(Boolean).some(s => LANGS.includes(s));
+      if (!urlHasLang) {
+        const detectedLang = resolveAutoLang(data.visitor_country);
+        if (detectedLang !== lang) {
+          const { p } = parseURL();
+          applyLang(detectedLang, p);
+          history.replaceState({ lang: detectedLang, page: p }, '', buildURL(detectedLang, p));
+        }
+      }
+    }
+  } catch (_) {
+    // silently keep current lang and fallback rate
+  } finally {
+    calcUpdate(); // refresh calculator with new rate
+  }
+}
+// ──────────────────────────────────────────────────────────────
+
+const T = {
+fr: {
+'nav.how':'Comment ça marche','nav.why':'Pourquoi Everelt','nav.cov':'Destinations','nav.faq':'FAQ','nav.cta':'Commencer',
+'hero.eyebrow':'Russie → Afrique de l\'Ouest','hero.h1':'Rechargez des portefeuilles mobiles en <em>Afrique de l\'Ouest</em>',
+'hero.sub':'Everelt simplifie la recharge de portefeuilles mobiles en Afrique de l\'Ouest — une expérience digitale sécurisée et intuitive.',
+'hero.support':'Payez en roubles, confirmez les coordonnées du portefeuille, et Everelt coordonne la transaction via notre réseau de partenaires agréés.',
+'hero.cta1':'Démarrer une transaction','hero.cta2':'Comment ça marche',
+'hero.t1':'Paiement sécurisé','hero.t2':'Taux tout compris','hero.t3':'< 15 min en général',
+'calc.label_send':'Montant (₽)','calc.label_recv':'Montant crédité sur le portefeuille',
+'calc.rate_label':'Taux appliqué','calc.total_label':'Vous payez au total',
+'calc.note':'Taux tout compris — aucun frais séparé. Taux indicatif, confirmé à l\'étape de paiement.','calc.btn':'Commencer →',
+'trust.1':'Processus simple','trust.2':'Taux transparents','trust.3':'Paiement sécurisé','trust.4':'Réseau Mobile Money UEMOA',
+'how.eyebrow':'Processus','how.title':'Comment fonctionne Everelt',
+'how.sub':'Un service digital simple de recharge de portefeuilles mobiles. Clair, transparent et sécurisé.',
+'how.s1t':'Renseignez vos coordonnées','how.s1b':'Saisissez simplement votre nom et votre numéro de téléphone pour démarrer. Aucune inscription préalable requise.',
+'how.s2t':'Saisissez les détails','how.s2b':'Indiquez le montant en roubles, le numéro du portefeuille mobile et le nom du titulaire du portefeuille.',
+'how.s3t':'Payez en roubles','how.s3b':'Réglez par carte bancaire MIR via notre partenaire de paiement agréé. Confirmez les détails avant tout débit.',
+'how.s4t':'Le portefeuille est rechargé','how.s4b':'Everelt coordonne l\'exécution via notre infrastructure partenaire locale. La plupart des portefeuilles sont crédités en moins de 15 minutes.',
+'how.note':'Le titulaire du portefeuille mobile peut être l\'utilisateur lui-même ou une tierce personne autorisée.',
+'why.eyebrow':'Avantages','why.title':'Pourquoi choisir Everelt',
+'why.f1t':'Expérience claire','why.f1b':'Un parcours simple, sans étapes superflues. Chaque écran est pensé pour la clarté.',
+'why.f2t':'Taux transparent','why.f2b':'Le taux tout compris et le montant crédité sur le portefeuille sont visibles avant confirmation. Aucune surprise après paiement.',
+'why.f3t':'Focus Afrique de l\'Ouest','why.f3b':'Conçu pour les besoins réels de recharge dans les marchés ouest-africains. Couvre toute la zone UEMOA.',
+'why.f4t':'Crédité en moins de 15 minutes','why.f4b':'La plupart des portefeuilles sont crédités en moins de 15 minutes. Les délais peuvent varier selon le réseau partenaire, mais nous visons la rapidité à chaque transaction.',
+'why.f5t':'Paiement sécurisé','why.f5b':'Les paiements passent par des intégrations sécurisées avec nos prestataires agréés. Vos données sont protégées.',
+'why.f6t':'Mobile-first','why.f6b':'Utilisable depuis un téléphone, via Telegram ou navigateur — sans aucune installation.',
+'cov.eyebrow':'Couverture','cov.title':'Toute la zone UEMOA',
+'cov.sub':'Bénin disponible dès maintenant. Les sept autres pays en cours de déploiement — une seule intégration, tout un continent.',
+'cov.benin':'Bénin','cov.ci':'Côte d\'Ivoire','cov.sn':'Sénégal','cov.ml':'Mali','cov.bf':'Burkina Faso','cov.tg':'Togo','cov.ne':'Niger','cov.gw':'Guinée-Bissau',
+'cov.live':'Disponible','cov.soon':'Bientôt',
+'cov.note':'Tous les pays de la zone UEMOA partagent le franc CFA (XOF), à parité fixe avec l\'euro.',
+'wl.title':'Soyez informé en premier','wl.sub':'Laissez votre adresse e-mail et nous vous prévenons dès qu\'un nouveau pays est disponible.','wl.placeholder':'votre@email.com','wl.btn':'Me prévenir','wl.success':'Inscription confirmée — nous vous contacterons à l\'ouverture !','wl.note':'Aucun spam. Uniquement une notification à l\'ouverture du service.',
+'disclaimer.bold':'Everelt n\'est pas une banque ni un établissement de paiement.','disclaimer.text':'Everelt ne détient pas de fonds et n\'exécute pas de transferts. L\'exécution est assurée via une infrastructure partenaire indépendante.',
+'price.eyebrow':'Tarification','price.title':'Simple et transparent',
+'price.sub':'Avant de confirmer, Everelt affiche le taux appliqué et le montant exact à créditer. Tout est inclus dans le taux.',
+'price.c1t':'Visible avant confirmation','price.c1b':'Le taux et le montant crédité sur le portefeuille s\'affichent avant que vous confirmiez. Aucun calcul requis.',
+'price.c2t':'Sans mauvaises surprises','price.c2b':'Ce que vous voyez est ce que vous payez et ce que reçoit le portefeuille. Rien d\'ajouté après.',
+'price.c3t':'Taux tout compris','price.c3b':'Notre taux inclut tous les coûts. Vous payez une somme en roubles, le portefeuille reçoit le montant XOF indiqué.',
+'sec.eyebrow':'Sécurité','sec.title':'Conçu pour inspirer confiance',
+'sec.sub':'Everelt est construit autour d\'une expérience de transaction sécurisée, transparente et responsable.',
+'sec.c1':'Intégrations prestataires sécurisées','sec.c2':'Confirmation avant paiement','sec.c3':'Vérification des données utilisateur','sec.c4':'Exécution structurée via partenaires',
+'sec.note':'Les utilisateurs doivent fournir des coordonnées exactes et confirmer le récapitulatif avant tout paiement.',
+'faq.eyebrow':'FAQ','faq.title':'Questions fréquentes',
+'faq.q1':'Qu\'est-ce qu\'Everelt ?','faq.a1':'Everelt est un service digital de recharge de portefeuilles mobiles en Afrique de l\'Ouest. Everelt ne détient pas de fonds, ne gère pas de comptes de paiement et n\'exécute pas de transferts financiers.',
+'faq.q2':'Everelt est-il une banque ou un établissement financier ?','faq.a2':'Non. Everelt est un service digital — l\'exécution est assurée via une infrastructure partenaire indépendante. Everelt ne contrôle pas de comptes de paiement et n\'exécute pas de virements.',
+'faq.q3':'Quelles informations dois-je fournir ?','faq.a3':'Votre nom, prénom et numéro de téléphone. C\'est tout — aucune inscription préalable n\'est nécessaire.',
+'faq.q4':'Puis-je initier une demande pour un portefeuille appartenant à une autre personne ?','faq.a4':'Oui. Vous pouvez renseigner les coordonnées d\'un portefeuille mobile appartenant à une autre personne. En soumettant la demande, vous confirmez que vous êtes autorisé à initier une demande impliquant ce portefeuille mobile.',
+'faq.q5':'Comment savoir quel montant sera crédité ?','faq.a5':'Avant de confirmer, vous verrez le taux appliqué et le montant exact à créditer sur l\'écran de confirmation.',
+'faq.q6':'Que se passe-t-il si j\'indique de mauvaises coordonnées ?','faq.a6':'Vous êtes responsable de la vérification des coordonnées avant paiement. Des données incorrectes peuvent affecter le bon déroulement de la transaction.',
+'faq.q7':'Combien de temps dure le traitement ?','faq.a7':'La plupart des transactions sont créditées en moins de 15 minutes. Dans de rares cas, le délai peut être plus long selon la disponibilité du réseau partenaire ou les conditions techniques du moment.',
+'faq.q8':'Les remboursements sont-ils possibles ?','faq.a8':'Des remboursements peuvent être effectués en cas d\'échec technique ou de rejet côté partenaire, sous réserve de confirmation par les prestataires concernés. Le délai peut atteindre 5 jours ouvrés. Consultez nos Conditions d\'utilisation.',
+'cta.title':'Accédez au service digital Everelt','cta.sub':'Un service digital simple, moderne et fiable pour la recharge de portefeuilles mobiles en Afrique de l\'Ouest.',
+'cta.btn1':'Commencer','cta.btn2':'Conditions d\'utilisation',
+'footer.tagline':'Plateforme d\'intermédiation pour la recharge de portefeuilles mobiles en Afrique de l\'Ouest.',
+'footer.col1':'Produit','footer.col2':'Légal','footer.col3':'Contact',
+'footer.home':'Accueil','footer.tos':'Conditions d\'utilisation','footer.privacy':'Confidentialité','footer.about':'À propos',
+'footer.copy':'© 2026 Everelt. Tous droits réservés.',
+'footer.compliance':'Everelt est un service digital. Everelt ne détient pas de fonds, ne gère pas de comptes de paiement et n\'exécute pas de transferts. L\'exécution est assurée via une infrastructure partenaire indépendante. Everelt ne fournit pas de services bancaires ou financiers.'
+},
+ru: {
+'nav.how':'Как это работает','nav.why':'Почему Everelt','nav.cov':'Направления','nav.faq':'FAQ','nav.cta':'Начать',
+'hero.eyebrow':'Россия → Западная Африка','hero.h1':'Пополнение мобильных кошельков в <em>Западной Африке</em>',
+'hero.sub':'Everelt упрощает пополнение мобильных кошельков в Западной Африке — безопасный и удобный цифровой сервис.',
+'hero.support':'Оплачивайте в рублях, укажите реквизиты кошелька — Everelt скоординирует транзакцию через нашу сеть авторизованных партнёров.',
+'hero.cta1':'Начать транзакцию','hero.cta2':'Как это работает',
+'hero.t1':'Безопасная оплата','hero.t2':'Единый тариф','hero.t3':'Как правило < 15 минут',
+'calc.label_send':'Сумма (₽)','calc.label_recv':'Зачислено на кошелёк',
+'calc.rate_label':'Применяемый курс','calc.total_label':'Итого к оплате',
+'calc.note':'Единый тариф — никаких скрытых комиссий. Курс индикативный, подтверждается на шаге оплаты.','calc.btn':'Начать →',
+'trust.1':'Простой процесс','trust.2':'Прозрачный тариф','trust.3':'Безопасный платёж','trust.4':'Сеть Mobile Money UEMOA',
+'how.eyebrow':'Процесс','how.title':'Как работает Everelt',
+'how.sub':'Простой цифровой сервис пополнения мобильных кошельков. Понятно, прозрачно и безопасно.',
+'how.s1t':'Введите данные','how.s1b':'Укажите имя и номер телефона — этого достаточно для начала. Регистрация не требуется.',
+'how.s2t':'Введите реквизиты','how.s2b':'Укажите сумму в рублях, номер мобильного кошелька и имя владельца кошелька.',
+'how.s3t':'Оплатите в рублях','how.s3b':'Оплатите картой МИР через нашего авторизованного партнёра. Подтвердите детали перед списанием.',
+'how.s4t':'Кошелёк пополнен','how.s4b':'Everelt координирует исполнение через нашу локальную партнёрскую инфраструктуру. Большинство кошельков пополняются менее чем за 15 минут.',
+'how.note':'Владелец кошелька может быть как самим плательщиком, так и другим получателем.',
+'why.eyebrow':'Преимущества','why.title':'Почему Everelt',
+'why.f1t':'Понятный интерфейс','why.f1b':'Простой процесс без лишних шагов. Каждый экран создан для ясности и удобства.',
+'why.f2t':'Прозрачный тариф','why.f2b':'Единый курс и сумма к зачислению видны до подтверждения. Никаких сюрпризов после оплаты.',
+'why.f3t':'Фокус на Западную Африку','why.f3b':'Создан специально для нужд пополнения кошельков на западноафриканских рынках. Покрывает всю зону UEMOA.',
+'why.f4t':'Зачисление менее чем за 15 минут','why.f4b':'Большинство кошельков пополняются менее чем за 15 минут. Время может варьироваться в зависимости от партнёрской сети, но мы стремимся к максимальной скорости при каждой транзакции.',
+'why.f5t':'Безопасная оплата','why.f5b':'Платежи проходят через защищённые интеграции с авторизованными провайдерами. Ваши данные надёжно защищены.',
+'why.f6t':'Mobile-first','why.f6b':'Удобно с телефона — через Telegram или браузер, без установки приложений.',
+'cov.eyebrow':'Охват','cov.title':'Вся зона UEMOA',
+'cov.sub':'Бенин доступен прямо сейчас. Ещё семь стран подключаются в ближайшее время — одна интеграция, целый континент.',
+'cov.benin':'Бенин','cov.ci':'Кот-д\'Ивуар','cov.sn':'Сенегал','cov.ml':'Мали','cov.bf':'Буркина-Фасо','cov.tg':'Того','cov.ne':'Нигер','cov.gw':'Гвинея-Бисау',
+'cov.live':'Доступно','cov.soon':'Скоро',
+'cov.note':'Все страны зоны UEMOA используют франк КФА (XOF) — стабильную валюту с фиксированным курсом к евро.',
+'wl.title':'Узнайте первым','wl.sub':'Оставьте e-mail — мы сообщим, как только новое направление станет доступным.','wl.placeholder':'ваш@email.com','wl.btn':'Уведомить меня','wl.success':'Вы в списке — мы напишем при открытии!','wl.note':'Никакого спама. Только одно уведомление при запуске.',
+'disclaimer.bold':'Everelt не является банком или платёжной организацией.','disclaimer.text':'Everelt не хранит средства и не исполняет переводов. Исполнение обеспечивается через независимую партнёрскую инфраструктуру.',
+'price.eyebrow':'Тарифы','price.title':'Просто и прозрачно',
+'price.sub':'Перед подтверждением Everelt показывает применяемый курс и точную сумму к зачислению. Всё включено в курс.',
+'price.c1t':'Видно до подтверждения','price.c1b':'Курс и сумма к зачислению отображаются до подтверждения. Никаких дополнительных расчётов.',
+'price.c2t':'Без скрытых платежей','price.c2b':'То, что вы видите — это то, что вы платите и что получает кошелёк. Ничего не добавляется после.',
+'price.c3t':'Единый тариф','price.c3b':'Наш курс включает все расходы. Вы платите рубли — кошелёк получает указанную сумму в XOF.',
+'sec.eyebrow':'Безопасность','sec.title':'Создан с заботой о доверии',
+'sec.sub':'Everelt построен вокруг безопасного, прозрачного и ответственного опыта транзакций.',
+'sec.c1':'Защищённые интеграции с провайдерами','sec.c2':'Подтверждение до оплаты','sec.c3':'Верификация данных пользователя','sec.c4':'Структурированное выполнение через партнёров',
+'sec.note':'Пользователи обязаны предоставить точные реквизиты и подтвердить сводку транзакции перед оплатой.',
+'faq.eyebrow':'FAQ','faq.title':'Часто задаваемые вопросы',
+'faq.q1':'Что такое Everelt?','faq.a1':'Everelt — цифровой сервис пополнения мобильных кошельков в Западной Африке. Everelt не хранит средства, не управляет платёжными счетами и не исполняет финансовые переводы.',
+'faq.q2':'Everelt — это банк или финансовая организация?','faq.a2':'Нет. Everelt — цифровой сервис. Исполнение обеспечивается через независимую партнёрскую инфраструктуру. Everelt не управляет платёжными счетами и не исполняет переводов.',
+'faq.q3':'Какие данные нужно предоставить?','faq.a3':'Имя, фамилия и номер телефона. Больше ничего — регистрация не нужна.',
+'faq.q4':'Можно ли подать запрос для кошелька другого человека?','faq.a4':'Да. Вы можете указать реквизиты мобильного кошелька, принадлежащего другому лицу. Подавая запрос, вы подтверждаете, что уполномочены инициировать запрос, связанный с данным мобильным кошельком.',
+'faq.q5':'Как узнать, какая сумма будет зачислена?','faq.a5':'Перед подтверждением вы увидите применяемый курс и точную сумму к зачислению на экране подтверждения.',
+'faq.q6':'Что будет, если ввести неверные реквизиты?','faq.a6':'Вы несёте ответственность за проверку реквизитов перед оплатой. Неверные данные могут повлиять на выполнение транзакции.',
+'faq.q7':'Сколько времени занимает обработка?','faq.a7':'Большинство транзакций зачисляются менее чем за 15 минут. В редких случаях время может быть больше — в зависимости от доступности партнёрской сети или технических условий в данный момент.',
+'faq.q8':'Возможен ли возврат средств?','faq.a8':'При сбое не по вине пользователя средства возвращаются в течение 48 рабочих часов. Подробнее — в Условиях использования.',
+'cta.title':'Воспользуйтесь цифровым сервисом Everelt','cta.sub':'Простой, современный и надёжный цифровой сервис пополнения мобильных кошельков в Западной Африке.',
+'cta.btn1':'Начать','cta.btn2':'Условия использования',
+'footer.tagline':'Платформа-посредник для пополнения мобильных кошельков в Западной Африке.',
+'footer.col1':'Продукт','footer.col2':'Правовая информация','footer.col3':'Контакты',
+'footer.home':'Главная','footer.tos':'Условия использования','footer.privacy':'Конфиденциальность','footer.about':'О компании',
+'footer.copy':'© 2026 Everelt. Все права защищены.',
+'footer.compliance':'Everelt — цифровой сервис. Everelt не хранит средства, не управляет платёжными счетами и не исполняет переводов. Исполнение обеспечивается через независимую партнёрскую инфраструктуру. Everelt не предоставляет банковских или финансовых услуг.'
+},
+en: {
+'nav.how':'How it works','nav.why':'Why Everelt','nav.cov':'Coverage','nav.faq':'FAQ','nav.cta':'Start',
+'hero.eyebrow':'Russia → West Africa','hero.h1':'Fast Mobile Wallet Funding for <em>West Africa</em>',
+'hero.sub':'Everelt makes it simple to fund mobile wallets in West Africa — a secure and user-friendly digital experience.',
+'hero.support':'Pay in rubles, confirm wallet details, and let Everelt coordinate the funding through our network of authorised partners.',
+'hero.cta1':'Start a transaction','hero.cta2':'How it works',
+'hero.t1':'Secure payment','hero.t2':'All-inclusive rate','hero.t3':'Usually under 15 min',
+'calc.label_send':'Amount (₽)','calc.label_recv':'Amount credited to wallet',
+'calc.rate_label':'Applied rate','calc.total_label':'Total charged',
+'calc.note':'All-inclusive rate — no separate fees. Rate is indicative, confirmed at payment step.','calc.btn':'Get started →',
+'trust.1':'Simple process','trust.2':'Transparent rates','trust.3':'Secure payment','trust.4':'UEMOA Mobile Money network',
+'how.eyebrow':'Process','how.title':'How Everelt works',
+'how.sub':'A simple digital service for mobile wallet funding. Straightforward, transparent, and secure.',
+'how.s1t':'Enter your details','how.s1b':'Simply provide your name and phone number to get started. No registration required.',
+'how.s2t':'Enter the details','how.s2b':'Provide the amount in rubles, the mobile wallet number, and the mobile wallet owner\'s name.',
+'how.s3t':'Pay in rubles','how.s3b':'Pay by MIR card via our authorised payment partner. Confirm all details before any charge.',
+'how.s4t':'Wallet is funded','how.s4b':'Everelt coordinates execution through our local partner infrastructure. Most wallets are credited in under 15 minutes.',
+'how.note':'The mobile wallet owner may be the user themselves or an authorised third party.',
+'why.eyebrow':'Benefits','why.title':'Why choose Everelt',
+'why.f1t':'Clear experience','why.f1b':'A simple flow with no unnecessary steps. Every screen is designed for clarity and ease.',
+'why.f2t':'Transparent rate','why.f2b':'The all-inclusive rate and amount credited to the wallet are visible before confirmation. No surprises after payment.',
+'why.f3t':'West Africa focus','why.f3b':'Built for real wallet funding needs in West African markets. Covers the entire UEMOA zone.',
+'why.f4t':'Credited in under 15 minutes','why.f4b':'Most wallets are credited in under 15 minutes. Timing can vary depending on the partner network, but speed is our standard target on every transaction.',
+'why.f5t':'Secure checkout','why.f5b':'Payments handled through secure integrations with authorised providers. Your data is protected.',
+'why.f6t':'Mobile-first','why.f6b':'Easy to use on phone, via Telegram or browser — no installation required.',
+'cov.eyebrow':'Coverage','cov.title':'The full UEMOA zone',
+'cov.sub':'Benin live today. Seven more countries rolling out — one integration, an entire continent.',
+'cov.benin':'Benin','cov.ci':'Côte d\'Ivoire','cov.sn':'Senegal','cov.ml':'Mali','cov.bf':'Burkina Faso','cov.tg':'Togo','cov.ne':'Niger','cov.gw':'Guinea-Bissau',
+'cov.live':'Live','cov.soon':'Coming soon',
+'cov.note':'All UEMOA countries share the CFA franc (XOF), a stable currency with a fixed parity to the euro.',
+'wl.title':'Be the first to know','wl.sub':'Leave your email and we\'ll notify you as soon as a new country goes live.','wl.placeholder':'your@email.com','wl.btn':'Notify me','wl.success':'You\'re on the list — we\'ll reach out when we launch!','wl.note':'No spam. One notification only, when the service opens.',
+'disclaimer.bold':'Everelt is not a bank or payment institution.','disclaimer.text':'Everelt does not hold funds and does not execute transfers. Execution is performed through independent partner infrastructure.',
+'price.eyebrow':'Pricing','price.title':'Simple and transparent',
+'price.sub':'Before confirming, Everelt shows the applied rate and the exact amount to be credited. Everything is included in the rate.',
+'price.c1t':'Visible before confirmation','price.c1b':'The rate and amount credited to the wallet are shown before you confirm. No calculation required.',
+'price.c2t':'No hidden surprises','price.c2b':'What you see is what you pay and what the wallet receives. Nothing added after.',
+'price.c3t':'All-inclusive rate','price.c3b':'Our rate includes all costs. You pay in rubles — the wallet receives the stated XOF amount.',
+'sec.eyebrow':'Security','sec.title':'Built with trust in mind',
+'sec.sub':'Everelt is designed around a secure, transparent, and responsible transaction experience.',
+'sec.c1':'Secure provider integrations','sec.c2':'Transaction confirmation before payment','sec.c3':'User detail verification','sec.c4':'Structured partner execution',
+'sec.note':'Users must provide accurate details and confirm the transaction summary before payment.',
+'faq.eyebrow':'FAQ','faq.title':'Frequently asked questions',
+'faq.q1':'What is Everelt?','faq.a1':'Everelt is a digital service for mobile wallet funding in West Africa. Everelt does not hold funds, does not operate payment accounts, and does not execute financial transfers.',
+'faq.q2':'Is Everelt a bank or money transfer operator?','faq.a2':'No. Everelt is not a bank or payment institution. It is a digital service — execution is performed through independent partner infrastructure.',
+'faq.q3':'What information do I need to provide?','faq.a3':'Your name and phone number. That\'s all — no prior registration required.',
+'faq.q4':'Can I submit a request for a wallet belonging to another person?','faq.a4':'Yes. You may provide the details of a mobile wallet belonging to another person. By submitting the request, you confirm that you are authorised to initiate a request involving the specified mobile wallet.',
+'faq.q5':'How do I know what amount will be credited?','faq.a5':'Before confirming, you will see the applied rate and the exact amount to be credited on the confirmation screen.',
+'faq.q6':'What if I enter incorrect wallet details?','faq.a6':'You are responsible for verifying details before payment. Incorrect data may affect successful transaction completion.',
+'faq.q7':'How long does processing take?','faq.a7':'Most transactions are credited in under 15 minutes. In rare cases it may take longer depending on partner network availability or technical conditions at that moment.',
+'faq.q8':'Are refunds possible?','faq.a8':'For failures not caused by user error, funds are returned within 48 working hours. See our Terms of Service for details.',
+'cta.title':'Access Everelt\'s mobile wallet funding service','cta.sub':'A clear, modern, and reliable digital service for mobile wallet funding in West Africa.',
+'cta.btn1':'Get started','cta.btn2':'Terms of Service',
+'footer.tagline':'Digital service for mobile wallet funding in West Africa.',
+'footer.col1':'Product','footer.col2':'Legal','footer.col3':'Contact',
+'footer.home':'Home','footer.tos':'Terms of Service','footer.privacy':'Privacy Policy','footer.about':'About',
+'footer.copy':'© 2026 Everelt. All rights reserved.',
+'footer.compliance':'Everelt is a digital service. Everelt does not hold funds, does not operate payment accounts, and does not execute transfers. Execution is performed through independent partner infrastructure. Everelt does not provide banking or financial services.'
+}
+};
+
+// ── COUNTRY → LANGUAGE MAP ────────────────────────────────────
+const COUNTRY_LANG = {
+  // Russian-speaking
+  RU:'ru', BY:'ru', KZ:'ru', KG:'ru', TJ:'ru', UZ:'ru', TM:'ru', MD:'ru', AM:'ru', AZ:'ru',
+  // UEMOA / Francophone West Africa
+  BJ:'fr', CI:'fr', SN:'fr', ML:'fr', BF:'fr', TG:'fr', NE:'fr', GW:'fr',
+  // Other French-speaking
+  FR:'fr', BE:'fr', CH:'fr', LU:'fr', MC:'fr', CD:'fr', CM:'fr', MG:'fr',
+  GA:'fr', CG:'fr', TD:'fr', CF:'fr', GN:'fr', MR:'fr', DJ:'fr', KM:'fr',
+};
+
+// ── DETECT LANGUAGE (browser fallback) ───────────────────────
+function detectBrowserLang() {
+  const langs = navigator.languages || [navigator.language || 'fr'];
+  for (const l of langs) {
+    const code = l.toLowerCase().split('-')[0];
+    if (code === 'ru') return 'ru';
+    if (code === 'fr') return 'fr';
+    if (code === 'en') return 'en';
+  }
+  return 'fr'; // default for Russia→West Africa corridor
+}
+
+// ── RESOLVE AUTO LANGUAGE ─────────────────────────────────────
+// Returns the best language to use on first visit
+// Priority: country (from CF) > browser language > fr
+function resolveAutoLang(countryCode) {
+  if (countryCode && COUNTRY_LANG[countryCode]) return COUNTRY_LANG[countryCode];
+  return detectBrowserLang();
+}
+
+
+// ── LANGUAGE STATE ────────────────────────────────────────────
+// 'ev_lang'        = auto-detected or default (can be overridden silently)
+// 'ev_lang_chosen' = user explicitly clicked a language button (never auto-overridden)
+let lang = localStorage.getItem('ev_lang_chosen') || localStorage.getItem('ev_lang') || 'fr';
+
+const LANGS  = ['fr', 'ru', 'en'];
+const PAGES  = ['home', 'tos', 'privacy', 'about'];
+const PAGE_TITLES = {
+  fr: { home:'Everelt — Recharge de portefeuilles mobiles en Afrique de l\'Ouest', tos:'Conditions d\'utilisation — Everelt', privacy:'Politique de confidentialité — Everelt', about:'À propos — Everelt' },
+  ru: { home:'Everelt — Пополнение мобильных кошельков в Западной Африке', tos:'Условия использования — Everelt', privacy:'Политика конфиденциальности — Everelt', about:'О компании — Everelt' },
+  en: { home:'Everelt — Mobile Wallet Funding for West Africa', tos:'Terms of Service — Everelt', privacy:'Privacy Policy — Everelt', about:'About — Everelt' }
+};
+
+// ── PARSE URL → { lang, page } ────────────────────────────────
+function parseURL() {
+  const parts = window.location.pathname.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
+  let l = 'fr', p = 'home';
+  parts.forEach(seg => {
+    if (LANGS.includes(seg)) l = seg;
+    if (PAGES.includes(seg)) p = seg;
+  });
+  return { l, p };
+}
+
+// ── BUILD URL from { lang, page } ────────────────────────────
+function buildURL(l, p) {
+  if (p === 'home') return l === 'fr' ? '/' : `/${l}`;
+  return `/${l}/${p}`;
+}
+
+// ── APPLY LANGUAGE (no URL push) ─────────────────────────────
+function applyLang(l, currentPage) {
+  lang = l;
+  localStorage.setItem('ev_lang', l);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = T[l][el.getAttribute('data-i18n')];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = T[l][el.getAttribute('data-i18n-ph')];
+    if (v !== undefined) el.placeholder = v;
+  });
+  document.querySelectorAll('.lb, .lb-sm').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === l);
+  });
+  document.querySelectorAll('.lang-block').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === l);
+  });
+  document.title = (PAGE_TITLES[l] || PAGE_TITLES.fr)[currentPage || 'home'];
+  calcUpdate();
+}
+
+// ── WAITLIST SUBMIT ───────────────────────────────────────────
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xwvankob';
+
+async function submitWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById('wl-email').value.trim();
+  if (!email) return;
+
+  const btn = e.target.querySelector('.waitlist-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, lang, source: 'waitlist', page: window.location.href })
+    });
+    e.target.style.display = 'none';
+    document.getElementById('wl-success').style.display = 'flex';
+  } catch(_) {
+    e.target.style.display = 'none';
+    document.getElementById('wl-success').style.display = 'flex';
+  }
+}
+
+// ── APPLY PAGE (no URL push) ──────────────────────────────────
+function applyPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + name);
+  if (el) el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.title = (PAGE_TITLES[lang] || PAGE_TITLES.fr)[name] || PAGE_TITLES.fr.home;
+}
+
+// ── PUBLIC: setLang — updates URL, marks explicit choice ─────
+function setLang(l) {
+  localStorage.setItem('ev_lang_chosen', l); // user made explicit choice
+  const { p } = parseURL();
+  applyLang(l, p);
+  history.pushState({ lang: l, page: p }, '', buildURL(l, p));
+}
+
+// ── PUBLIC: showPage — updates URL ───────────────────────────
+function showPage(name) {
+  applyPage(name);
+  history.pushState({ lang, page: name }, '', buildURL(lang, name));
+}
+
+// ── PUBLIC: scrollToSection ───────────────────────────────────
+function scrollToSection(id) {
+  applyPage('home');
+  history.pushState({ lang, page: 'home' }, '', buildURL(lang, 'home'));
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 60);
+}
+
+// ── HANDLE BROWSER BACK / FORWARD ────────────────────────────
+window.addEventListener('popstate', (e) => {
+  if (e.state) {
+    applyLang(e.state.lang || 'fr', e.state.page || 'home');
+    applyPage(e.state.page || 'home');
+  } else {
+    const { l, p } = parseURL();
+    applyLang(l, p);
+    applyPage(p);
+  }
+});
+
+// ── INIT: read URL on first load ──────────────────────────────
+(function init() {
+  const { l: urlLang, p } = parseURL();
+  const urlHasLang = window.location.pathname.split('/').filter(Boolean).some(s => LANGS.includes(s));
+
+  let initLang;
+  if (urlHasLang) {
+    // URL explicitly specifies language — always respect it
+    initLang = urlLang;
+  } else if (localStorage.getItem('ev_lang_chosen')) {
+    // User has previously made an explicit choice — respect it
+    initLang = localStorage.getItem('ev_lang_chosen');
+  } else if (localStorage.getItem('ev_lang')) {
+    // Previously auto-detected — use it (will be refreshed by loadRate if country available)
+    initLang = localStorage.getItem('ev_lang');
+  } else {
+    // Truly first visit — use browser language immediately (country will refine after rate loads)
+    initLang = detectBrowserLang();
+  }
+
+  applyLang(initLang, p);
+  applyPage(p);
+  history.replaceState({ lang: initLang, page: p }, '', buildURL(initLang, p));
+})();
+
+function calcUpdate() {
+  const rub = parseFloat(document.getElementById('rub-input').value) || 0;
+  const fmt = lang === 'fr' ? 'fr-FR' : lang === 'ru' ? 'ru-RU' : 'en-US';
+  if (rub < 500) {
+    document.getElementById('xof-result').textContent = '—';
+    document.getElementById('rate-display').textContent = '—';
+    document.getElementById('total-display').textContent = '—';
+    return;
+  }
+  const xof = Math.round(rub * RATE);
+  const sep = lang === 'en' ? '.' : ',';
+  document.getElementById('xof-result').textContent = xof.toLocaleString(fmt) + ' XOF';
+  document.getElementById('rate-display').textContent = '1 ₽ = ' + RATE.toFixed(2).replace('.', sep) + ' XOF';
+  document.getElementById('total-display').textContent = rub.toLocaleString(fmt) + ' ₽';
+}
+
+function toggleFaq(btn) {
+  const ans = btn.nextElementSibling;
+  const open = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+  if (!open) { ans.classList.add('open'); btn.classList.add('open'); }
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+});
+
+loadRate(); // fetch live rate — updates calculator once resolved
+</script>
+</body>
+</html>
